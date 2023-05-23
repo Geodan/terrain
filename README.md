@@ -2,6 +2,14 @@
 
 Scripts for creating Cesium Quantized mesh terrain tiles
 
+## Samples
+
+Utrechtse Heuvelrug
+
+https://geodan.github.io/terrain/samples/heuvelrug/
+
+![image](https://github.com/Geodan/terrain/assets/538812/ecbe4c78-1fcc-424a-a564-ca001a202d48)
+
 ## Running
 
 Run scripts from 'scripts' folder. 
