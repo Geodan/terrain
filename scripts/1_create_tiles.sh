@@ -18,5 +18,5 @@ gdal_merge.bat - test.TIF *_3857.TIF
 
 # create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -e 0 -s 15 -o /data/tiles /data/test.TIF
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -e 0 -s 15 -l -o /data/tiles /data/test.TIF
+docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -o /data/tiles /data/test.TIF
+docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -l -o /data/tiles /data/test.TIF
