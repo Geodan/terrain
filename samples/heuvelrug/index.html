@@ -68,8 +68,10 @@
     });
    
     var terrainProvider = new Cesium.CesiumTerrainProvider({
-       url : './tiles'
+       url : './tiles',
+       requestVertexNormals: true
     });
+
     viewer.scene.terrainProvider = terrainProvider;
     viewer.scene.globe.terrainExaggeration = 10.0;
     viewer.scene.globe.enableLighting = true;
