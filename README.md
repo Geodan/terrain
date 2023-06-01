@@ -2,6 +2,8 @@
 
 Scripts for creating Cesium Quantized mesh terrain tiles
 
+Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
+
 ## Samples
 
 Utrechtse Heuvelrug
