@@ -7,16 +7,20 @@ then
     echo "${DIR} directory created."
 fi
 
-for f in $(find -name '*.TIF'); do
+files=""
+for f in $(find -name '*.tif'); do
    f="${f%.*}"
-   echo "Processing file ${f}.TIF..."
-   gdal_fillnodata.bat ${f}.TIF ${f}_filled.TIF
-   gdalwarp -t_srs EPSG:3857 ${f}_filled.TIF ${f}_filled_3857.TIF
+   echo "Processing file ${f}.tif..."
+   gdal_fillnodata.bat ${f}.tif ${f}_filled.tif
+   gdalwarp -s_srs EPSG:7415 -t_srs EPSG:3857+4979 ${f}_filled.tif ${f}_filled_3857.tif
+   files="${files} ${f}_filled_3857.tif"
 done
 
-gdal_merge.bat - test.TIF *_3857.TIF
+echo "files123 $files"
+# todo use a vrt instead of merging?
+gdal_merge.bat -o test.tif ${files}
 
 # create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -o /data/tiles /data/test.TIF
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -l -o /data/tiles /data/test.TIF
+docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -o /data/tiles /data/test.tif
+docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 0 -s 15 -l -o /data/tiles /data/test.tif

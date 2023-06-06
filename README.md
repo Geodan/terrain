@@ -4,6 +4,10 @@ Scripts for creating Cesium Quantized mesh terrain tiles
 
 Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
+## Input
+
+0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
+
 ## Samples
 
 Utrechtse Heuvelrug
