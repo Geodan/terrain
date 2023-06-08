@@ -16,7 +16,39 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 
 ![image](https://github.com/Geodan/terrain/assets/538812/ecbe4c78-1fcc-424a-a564-ca001a202d48)
 
-## Running
+## Docker
+
+The Docker image contains:
+
+- ctb-tile
+
+- GDAL
+
+- GDAL python tooling
+
+- shell scripts for processing tifs to terrain tiles
+
+Todo: Add a shell script to Docker image
+
+### Building
+
+```
+$ docker build -t terrain_tiler .
+```
+
+### Running
+
+```
+$ docker run -it terrain-tiler /bin/bash
+```
+
+gdal_fillnodata can run by:
+
+```
+$ python /usr/local/bin/gdal_fillnodata.py
+```
+
+## Scripts
 
 Run scripts from 'scripts' folder. 
 
