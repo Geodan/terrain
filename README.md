@@ -39,8 +39,12 @@ $ docker build -t terrain_tiler .
 ### Running
 
 ```
-$ docker run -it terrain-tiler /bin/bash
+$ docker run -it terrain-tiler hello
+hello
 ```
+
+Script process.sh is run as entrypoint
+
 
 gdal_fillnodata can run by:
 
