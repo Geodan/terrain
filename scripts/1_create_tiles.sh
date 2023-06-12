@@ -1,7 +1,7 @@
 print_usage()
 {
    # Display Help
-   echo "Creates 3D Tiles from DTM tifs."
+   echo "Creates Terrain Tiles from DTM tifs."
    echo
    echo "Syntax: sh ./1_create_tiles.sh [-s|e|h]"
    echo "options:"
