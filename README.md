@@ -38,12 +38,18 @@ $ sh 3_cleanup.sh
 ## Process
 
 ```mermaid
-flowchart LR
+flowchart TD
 
-A[Hard] -->|Text| B(Round)
-B --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
+A[Start] -->|Get tif's| B(TIF's) 
+B --> C{TIFs remaining?}
+C -->|No| D[Build VRT]
+C -->|Yes| E[Select TIF]
+E --> F[Run GDAL Fill NODATA]
+F --> G[Run GDAL Warp to EPSG:4326+4979]
+G --> C
+D --> H[Run CTB-TILE]
+H --> I[Unzip terrain tiles]
+I --> J[Terrain tiles ready - end]
 ```
 
 
