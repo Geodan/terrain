@@ -23,6 +23,8 @@ print_usage()
 
 echo Creates Terrain Tiles from DTM tifs.
 echo
+start_time=$(date +%s)
+echo Start: $date
 
 # Parse input arguments (flags)
 while getopts i:o:s:e:h flag
@@ -57,7 +59,6 @@ then
     echo $output_dir directory created.
 fi
 
-
 # Check if input directory exists and has .tif files
 if ! compgen -G "$input_dir/*$tif_extension" > /dev/null; 
 then
@@ -70,13 +71,13 @@ for f in $(find -name *.$tif_extension); do
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
-    gdal_fillnodata.bat $f $tmp_dir/${filename}_filled.$tif_extension
-    gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 $tmp_dir/${filename}_filled.${tif_extension} $tmp_dir/${filename}_filled_4326.${tif_extension}
-    rm $tmp_dir/${filename}_filled.$tif_extension
+    gdal_fillnodata.bat $f ${tmp_dir}/${filename}_filled.$tif_extension
+    gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
+    rm ${tmp_dir}/${filename}_filled.${tif_extension}
 done
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -overwrite ${tmp_dir}/ahn.vrt ${tmp_dir}/*.$tif_extension 
+gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.$tif_extension 
 
 # create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
@@ -84,4 +85,9 @@ echo Running ctb-tile in Docker image...
 docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
-rm $tmp_dir/ahn.vrt
+rmdir -r $tmp_dir
+end_time=$(date +%s)
+echo End: $date
+elapsed_time=$((end_time-start_time))
+echo Elapsed: "Elapsed Time: $elapsed_time seconds."
+echo End of script.
