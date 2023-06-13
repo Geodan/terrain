@@ -35,5 +35,16 @@ $ sh 2_unzip.sh
 $ sh 3_cleanup.sh
 ```
 
+## Process
+
+```mermaid
+flowchart LR
+
+A[Hard] -->|Text| B(Round)
+B --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+```
+
 
 
