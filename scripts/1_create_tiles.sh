@@ -1,11 +1,11 @@
 #!/bin/sh
 # Set default values 
-input_dir=dtms
+input_dir=voorhout
 output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
 end_zoom=0
-tif_extension=tif
+tif_extension=TIF
 s_srs=EPSG:7415
 
 print_usage()
@@ -24,7 +24,7 @@ print_usage()
 echo Creates Terrain Tiles from DTM tifs.
 echo
 start_time=$(date +%s)
-echo Start: $date
+echo Start: $(date)
 
 # Parse input arguments (flags)
 while getopts i:o:s:e:h flag
@@ -60,13 +60,13 @@ then
 fi
 
 # Check if input directory exists and has .tif files
-if ! compgen -G "$input_dir/*$tif_extension" > /dev/null; 
+if ! compgen -G "${input_dir}/*${tif_extension}" > /dev/null; 
 then
-    echo Folder $input_dir does not exist or does not contain $tif_extension files.
+    echo Folder ${input_dir} does not exist or does not contain ${tif_extension} files.
     exit 1
 fi
 
-for f in $(find -name *.$tif_extension); do
+for f in $(find ${input_dir}/*.${tif_extension}); do
     echo "Processing file $f..."
     f_out=$(basename $f)  
     filename="${f_out%.*}"
@@ -85,9 +85,9 @@ echo Running ctb-tile in Docker image...
 docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
-rmdir -r $tmp_dir
+rm -r $tmp_dir 
 end_time=$(date +%s)
-echo End: $date
+echo End: $(date)
 elapsed_time=$((end_time-start_time))
 echo Elapsed: "Elapsed Time: $elapsed_time seconds."
 echo End of script.
