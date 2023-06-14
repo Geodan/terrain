@@ -1,12 +1,13 @@
 #!/bin/sh
 # Set default values 
-input_dir=voorhout
+input_dir=dtms
 output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
 end_zoom=0
 tif_extension=TIF
 s_srs=EPSG:7415
+volume_mount=D:/dev/github.com/geodan/terrain/scripts
 
 print_usage()
 {
@@ -77,15 +78,15 @@ for f in $(find ${input_dir}/*.${tif_extension}); do
 done
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.$tif_extension 
+gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
 # create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
 echo Running ctb-tile in Docker image...
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
-docker run -it -v D:/dev/github.com/geodan/terrain/scripts:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
-rm -r $tmp_dir 
+# rm -r $tmp_dir 
 end_time=$(date +%s)
 echo End: $(date)
 elapsed_time=$((end_time-start_time))
