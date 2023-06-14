@@ -77,8 +77,8 @@ for f in $(find ${input_dir}/*.${tif_extension}); do
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
-    # todo remove bat to run in linux/docker
-    gdal_fillnodata.bat $f ${tmp_dir}/${filename}_filled.$tif_extension
+    gdal_fillnodata.py $f ${tmp_dir}/${filename}_filled.$tif_extension
+
     gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
     rm ${tmp_dir}/${filename}_filled.${tif_extension}
 done
