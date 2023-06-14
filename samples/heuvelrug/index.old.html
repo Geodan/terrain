@@ -39,14 +39,15 @@
        url : './tiles'
     });
     viewer.scene.terrainProvider = terrainProvider;
-    viewer.scene.globe.terrainExaggeration = 1.0;
+    viewer.scene.globe.enableLighting = true;
+    viewer.scene.globe.terrainExaggeration = 10.0;
 
     // zoom to texel...
     viewer.camera.setView({
-      destination : new Cesium.Cartesian3.fromDegrees(4.97234, 52.07813, 107),
+      destination : new Cesium.Cartesian3.fromDegrees(5.279961,52.098650, 500),
       orientation: {
-        heading : Cesium.Math.toRadians(60),
-        pitch : Cesium.Math.toRadians(-14),
+        heading : Cesium.Math.toRadians(0),
+        pitch : Cesium.Math.toRadians(-20),
         roll : 0.0
       }
     });
