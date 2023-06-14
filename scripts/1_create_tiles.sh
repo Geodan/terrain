@@ -86,7 +86,7 @@ gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension}
 
 # create quantized mesh tiles for level 15-9 using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
-echo Running ctb-tile in Docker image...gdalbuild
+echo Running ctb-tile in Docker image...
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # create layer.json file
@@ -109,7 +109,7 @@ docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-
 gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmplevel9}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -l -o ${output_dir} ${tmp_dir}/level9.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
 
 # end workaround for level 8 - 0
 
