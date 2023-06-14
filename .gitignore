@@ -1,4 +1,6 @@
 *.zip
 *.TIF
-scripts/tiles
+*.tif
 *.vrt
+*.tif.aux.xml
+scripts/tiles
