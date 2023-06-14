@@ -60,7 +60,7 @@ then
     echo $output_dir directory created.
 fi
 
-: <<'END'
+# : <<'END'
 
 # Check if input directory exists and has .tif files
 if ! compgen -G "${input_dir}/*${tif_extension}" > /dev/null; 
@@ -79,7 +79,7 @@ for f in $(find ${input_dir}/*.${tif_extension}); do
     rm ${tmp_dir}/${filename}_filled.${tif_extension}
 done
 
-END
+# END
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
@@ -106,10 +106,10 @@ fi
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-format GTiff --output-dir ${tmplevel9} -s 9 -e 9 ${tmp_dir}/ahn.vrt
 
 # create VRT for GeoTIFF tiles on level 9
-gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmplevel9}/9/*/*.tif
+gdalbuildvrt ${tmplevel9}/level9.vrt ./${tmplevel9}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmplevel9}/level9.vrt
 
 # end workaround for level 8 - 0
 
