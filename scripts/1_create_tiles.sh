@@ -102,7 +102,7 @@ fi
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-format GTiff --output-dir ${tmplevel9} -s 9 -e 9 ${tmp_dir}/ahn.vrt
 
 # create VRT for GeoTIFF tiles on level 9
-gdalbuildvrt tmp/level9.vrt ./${tmplevel9}/9/*/*.tif
+gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmplevel9}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -l -o ${output_dir} ${tmp_dir}/level9.vrt
