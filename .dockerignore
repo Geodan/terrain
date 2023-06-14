@@ -1,0 +1,4 @@
+**/*.tif
+**/*.TIF
+**/*.terrain
+./scripts/tiles/*

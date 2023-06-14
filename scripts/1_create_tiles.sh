@@ -7,7 +7,6 @@ start_zoom=15
 end_zoom=0
 tif_extension=tif
 s_srs=EPSG:7415
-volume_mount=/mnt/d/dev/github.com/geodan/terrain/scripts
 
 print_usage()
 {
@@ -87,24 +86,23 @@ done
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
-# create quantized mesh tiles for level 15-9 using docker image tumgis/ctb-quantized-mesh
-# todo: use $pwd on Linux
-echo Running ctb-tile in Docker image...
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+# create quantized mesh tiles for level start_zoom-9 using ctb-tile
+echo Running ctb-tile from start_zoom to level 9...
+ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # create layer.json file
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # start workaround for level 8 - 0
 
 # generate GeoTIFF tiles on level 9
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-format GTiff --output-dir ${tmp_dir} -s 9 -e 9 ${tmp_dir}/ahn.vrt
+ctb-tile --output-format GTiff --output-dir ${tmp_dir} -s 9 -e 9 ${tmp_dir}/ahn.vrt
 
 # create VRT for GeoTIFF tiles on level 9
 gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
 
 # end workaround for level 8 - 0
 
