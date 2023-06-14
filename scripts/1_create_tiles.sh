@@ -85,6 +85,9 @@ gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension}
 echo Running ctb-tile in Docker image...
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 
+# create layer.json file
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+
 # start workaround for level 8 - 0
 
 # Create output directory
