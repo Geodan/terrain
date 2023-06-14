@@ -80,8 +80,25 @@ $ sh 2_unzip.sh
 $ sh 3_cleanup.sh
 ```
 
+## Process
+
+```mermaid
+flowchart TD
+
+A[Start] -->|Get tif's| B(TIF's) 
+B --> C{TIFs remaining?}
+C -->|No| D[Build VRT]
+C -->|Yes| E[Select TIF]
+E --> F[Run GDAL Fill NODATA]
+F --> G[Run GDAL Warp to EPSG:4326+4979]
+G --> C
+D --> H[Run CTB-TILE]
+H --> I[Unzip terrain tiles]
+I --> J[Terrain tiles ready - end]
+```
+
+## Sources
+
 AHN3 [GeoJSON](https://services.arcgis.com/nSZVuSZjHpEZZbRo/arcgis/rest/services/Kaartbladen_AHN3/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=)
-
-
 
 
