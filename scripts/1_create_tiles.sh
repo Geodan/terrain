@@ -7,7 +7,7 @@ start_zoom=15
 end_zoom=0
 tif_extension=TIF
 s_srs=EPSG:7415
-volume_mount=D:/dev/github.com/geodan/terrain/scripts
+volume_mount=/mnt/d/dev/github.com/geodan/terrain/scripts
 
 print_usage()
 {
@@ -60,6 +60,8 @@ then
     echo $output_dir directory created.
 fi
 
+: <<'END'
+
 # Check if input directory exists and has .tif files
 if ! compgen -G "${input_dir}/*${tif_extension}" > /dev/null; 
 then
@@ -77,12 +79,14 @@ for f in $(find ${input_dir}/*.${tif_extension}); do
     rm ${tmp_dir}/${filename}_filled.${tif_extension}
 done
 
+END
+
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
 # create quantized mesh tiles for level 15-9 using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
-echo Running ctb-tile in Docker image...
+echo Running ctb-tile in Docker image...gdalbuild
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # create layer.json file
