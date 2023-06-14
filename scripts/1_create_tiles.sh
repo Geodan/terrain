@@ -80,12 +80,33 @@ done
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
-# create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
+# create quantized mesh tiles for level 15-9 using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
 echo Running ctb-tile in Docker image...
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
 
+# start workaround for level 8 - 0
+
+# Create output directory
+tmplevel9=tmplevel9
+if [ ! -d "$tmplevel9" ];
+then
+    mkdir -p "$tmplevel9"
+    echo  $tmplevel9 directory created.
+fi
+
+# generate GeoTIFF tiles on level 9
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-format GTiff --output-dir ${tmplevel9} -s 9 -e 9 ${tmp_dir}/ahn.vrt
+
+# create VRT for GeoTIFF tiles on level 9
+gdalbuildvrt tmp/level9.vrt ./${tmplevel9}/9/*/*.tif
+
+# Make terrain tiles for level 8-0 
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -l -o ${output_dir} ${tmp_dir}/level9.vrt
+
+# end workaround for level 8 - 0
+
+# todo: cleanup
 # rm -r $tmp_dir 
 end_time=$(date +%s)
 echo End: $(date)
