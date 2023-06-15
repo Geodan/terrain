@@ -42,22 +42,13 @@ $ docker build -t terrain_tiler .
 
 ### Running
 
-```
-$ docker run -it terrain-tiler hello
-Terrain tiler 0.1
-Startup parameters: hello
-Current directory: /data
-Tif files available:
-ls: cannot access '*.tif': No such file or directory```
-```
-
-Use a volume mount to process tifs on host:
+Use a volume mount in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v D:/geodata/tifs:/data -it terrain-tiler hello
+$ docker run -v [local_path_to_scripts_dir]:/app/scripts -it terrain_tiler
 ```
 
-Script process.sh is run as entrypoint
+Script process.sh is run as entrypoint.
 
 gdal_fillnodata can run by:
 

@@ -5,7 +5,11 @@ echo Terrain tiler 0.1
 echo Startup parameters: $1
 echo Current directory: $PWD
 echo Tif files available: 
-ls *.tif
+
+cd scripts
+
+# Run script to reate tiles
+bash 1_create_tiles.sh
 
 # todo
 # - Read startup parmeters
