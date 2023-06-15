@@ -6,7 +6,10 @@ echo Startup parameters: $1
 echo Current directory: $PWD
 echo Tif files available: 
 
-bash scripts/1_create_tiles.sh
+cd scripts
+
+# Run script to reate tiles
+bash 1_create_tiles.sh
 
 # todo
 # - Read startup parmeters
