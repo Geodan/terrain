@@ -5,9 +5,9 @@ output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
 end_zoom=0
-tif_extension=TIF
+tif_extension=tif
 s_srs=EPSG:7415
-volume_mount=D:/dev/github.com/geodan/terrain/scripts
+volume_mount=/mnt/d/dev/github.com/geodan/terrain/scripts
 
 print_usage()
 {
@@ -61,9 +61,15 @@ then
 fi
 
 # Check if input directory exists and has .tif files
-if ! compgen -G "${input_dir}/*${tif_extension}" > /dev/null; 
+if [ -d "${input_dir}" ];
 then
-    echo Folder ${input_dir} does not exist or does not contain ${tif_extension} files.
+    if ! ls ./${input_dir}/*.${tif_extension} >/dev/null 2>&1;
+    then
+        echo Folder ${input_dir} does not contain ${tif_extension} files.
+        exit 1
+    fi
+else
+    echo Folder ${input_dir} does not exist
     exit 1
 fi
 
@@ -72,6 +78,7 @@ for f in $(find ${input_dir}/*.${tif_extension}); do
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
+    # todo remove bat to run in linux/docker
     gdal_fillnodata.bat $f ${tmp_dir}/${filename}_filled.$tif_extension
     gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
     rm ${tmp_dir}/${filename}_filled.${tif_extension}
@@ -80,12 +87,28 @@ done
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
-# create quantized mesh tiles using docker image tumgis/ctb-quantized-mesh
+# create quantized mesh tiles for level 15-9 using docker image tumgis/ctb-quantized-mesh
 # todo: use $pwd on Linux
 echo Running ctb-tile in Docker image...
-docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+
+# create layer.json file
 docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
+# start workaround for level 8 - 0
+
+# generate GeoTIFF tiles on level 9
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile --output-format GTiff --output-dir ${tmp_dir} -s 9 -e 9 ${tmp_dir}/ahn.vrt
+
+# create VRT for GeoTIFF tiles on level 9
+gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
+
+# Make terrain tiles for level 8-0 
+docker run -v ${volume_mount}:/data tumgis/ctb-quantized-mesh ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+
+# end workaround for level 8 - 0
+
+# todo: cleanup
 # rm -r $tmp_dir 
 end_time=$(date +%s)
 echo End: $(date)
