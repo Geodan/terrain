@@ -5,7 +5,7 @@ output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
 end_zoom=0
-tif_extension=tif
+tif_extension=TIF
 s_srs=EPSG:7415
 
 print_usage()
