@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Set default values 
-input_dir=.
 output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
@@ -19,9 +18,8 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: sh 1_create_tiles.sh '[-s|e|h|i|o]'
+   echo Syntax: sh 1_create_tiles.sh '[-s|e|h|o]'
    echo options:
-   echo i     Input directory - default $input_dir
    echo o     Output directory - default $output_dir
    echo s     Start zoomlevel - default $start_zoom
    echo e     End zoomlevel - default $end_zoom
@@ -33,7 +31,6 @@ print_usage()
 while getopts s:e:h flag
 do
     case $flag in
-        i) input_dir=$OPTARG;;
         o) output_dir=$OPTARG;;
         s) start_zoom=$OPTARG;;
         e) end_zoom=$OPTARG;;
@@ -41,7 +38,6 @@ do
     esac
 done
 
-echo Input directory: $input_dir
 echo Output directory: $output_dir
 echo Tif extension: $tif_extension
 echo Start zoomlevel: $start_zoom
@@ -49,9 +45,9 @@ echo End zoomlevel: $end_zoom
 echo Source SRS: $s_srs
 
 # Check if input directory has .tif files
-if ! ls ./${input_dir}/*.${tif_extension} >/dev/null 2>&1;
+if ! ls *.${tif_extension} >/dev/null 2>&1;
 then
-    echo Error input directory ${input_dir} does not contain ${tif_extension} files.
+    echo Error input directory does not contain ${tif_extension} files.
     echo End of processing
     exit 1
 fi
@@ -75,7 +71,7 @@ echo $output_dir directory created.
 
 
 echo Start gdal_fillnodata and gdalwarp on input files...
-for f in $(find ${input_dir}/*.${tif_extension}); do
+for f in $(find *.${tif_extension}); do
     echo "Processing file $f..."
     f_out=$(basename $f)  
     filename="${f_out%.*}"

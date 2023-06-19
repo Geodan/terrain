@@ -51,10 +51,9 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
 The script takes as input parameters:
 
 ```
-Syntax: sh 1_create_tiles.sh [-s|e|h|i|o]
+Syntax: sh 1_create_tiles.sh [-s|e|h|o]
 options:
-i Input directory - default .
-o Output directory - default tiles
+o Output directory - default 'tiles'
 s Start zoomlevel - default 15
 e End zoomlevel - default 0
 h Print this help
@@ -73,7 +72,6 @@ Terrain tiler 0.1
 Startup parameters: -s
 Current directory: /data
 Start: Mon Jun 19 12:20:37 UTC 2023
-Input directory: .
 Output directory: tiles
 Tif extension: TIF
 Start zoomlevel: 10
