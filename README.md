@@ -71,41 +71,29 @@ Sample output:
 Terrain tiler 0.1
 Startup parameters: -s
 Current directory: /data
-Start: Mon Jun 19 12:20:37 UTC 2023
+Start: Mon Jun 19 13:19:55 UTC 2023
 Output directory: tiles
 Tif extension: TIF
 Start zoomlevel: 10
 End zoomlevel: 0
 Source SRS: EPSG:7415
 tmp directory created.
+Delete output directory...
+tiles directory created.
 Start gdal_fillnodata and gdalwarp on input files...
-Processing file ./M5_30GZ1.TIF...
-0...10...20...30...40...50...60...70...80...90...100 - done.
-Creating output file that is 1282P x 981L.
-Processing tmp/M5_30GZ1_filled.TIF [1/1] : 0Using internal nodata values (e.g. 3.40282e+38) for image tmp/M5_30GZ1_filled.TIF.
-Copying nodata values from source tmp/M5_30GZ1_filled.TIF to destination tmp/M5_30GZ1_filled_4326.TIF.
-...10...20...30...40...50...60...70...80...90...100 - done.
+Processing file M5_30GZ1.TIF...
 Building virtual raster tmp/ahn.vrt...
-0...10...20...30...40...50...60...70...80...90...100 - done.
 Running ctb-tile from 10 to level 9...
-0...10...20...30...40...50...60...70...80...90...100 - done.
 Creating layer.json file...
-0...10...20...30...40...50...60...70...80...90...100 - done.
-0...10...20...30...40...50...60...70...80...90...100 - done.
-0...10...20...30...40...50...60...70...80...90...100 - done.
 Creating GTiff tiles for level 9...
-0...10...20...30...40...50...60...70...80...90...100 - done.
 Create vrt for GTiff tiles on level 9...
-0...10...20...30...40...50...60...70...80...90...100 - done.
 Run ctb tile on level 8-0
-0...10...20...30...40...50...60...70...80...90...100 - done.
-0...10
 Cleaning up...
 Unzip terrain files...
-End: Mon Jun 19 12:20:39 UTC 2023
-Elapsed: Elapsed Time: 2 seconds.
-End of processing
-```
+End: Mon Jun 19 13:19:56 UTC 2023
+Elapsed time: 1 seconds.
+End of processing`
+``
 
 ## Process
 

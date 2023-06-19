@@ -76,39 +76,38 @@ for f in $(find *.${tif_extension}); do
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
-    gdal_fillnodata.py $f ${tmp_dir}/${filename}_filled.$tif_extension
+    gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.$tif_extension
 
-    gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
+    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
     rm ${tmp_dir}/${filename}_filled.${tif_extension}
 done
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
+gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
 # create quantized mesh tiles for level start_zoom-9 using ctb-tile
 echo Running ctb-tile from ${start_zoom} to level 9...
-ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 #create layer.json file
 echo Creating layer.json file...
-ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -q -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # start workaround for level 8 - 0
 
 # generate GeoTIFF tiles on level 9
 echo Creating GTiff tiles for level 9...
-ctb-tile --output-format GTiff --output-dir ${tmp_dir} -s 9 -e 9 ${tmp_dir}/ahn.vrt
+ctb-tile --output-format GTiff --output-dir ${tmp_dir} -q -s 9 -e 9 ${tmp_dir}/ahn.vrt
 
 # create VRT for GeoTIFF tiles on level 9
 echo Create vrt for GTiff tiles on level 9...
-gdalbuildvrt ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
+gdalbuildvrt -q ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
 echo Run ctb tile on level 8-0
-ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
 
 # end workaround for level 8 - 0
-echo
 echo Cleaning up...
 rm -r $tmp_dir 
 
@@ -121,5 +120,5 @@ done
 end_time=$(date +%s)
 echo End: $(date)
 elapsed_time=$((end_time-start_time))
-echo Elapsed: "Elapsed Time: $elapsed_time seconds."
+echo Elapsed time: $elapsed_time seconds.
 echo End of processing
