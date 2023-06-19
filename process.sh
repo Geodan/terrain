@@ -64,11 +64,15 @@ then
 fi
 
 # Create output directory
-if [ ! -d "$output_dir" ];
+if [ -d "$output_dir" ];
 then
-    mkdir -p "$output_dir"
-    echo $output_dir directory created.
+    echo Delete output directory...
+    rm -r $output_dir 
 fi
+
+mkdir -p "$output_dir"
+echo $output_dir directory created.
+
 
 echo Start gdal_fillnodata and gdalwarp on input files...
 for f in $(find ${input_dir}/*.${tif_extension}); do
@@ -111,7 +115,6 @@ ctb-tile -f Mesh -C -N -e ${end_zoom} -s 8 -o ${output_dir} ${tmp_dir}/level9.vr
 echo
 echo Cleaning up...
 rm -r $tmp_dir 
-
 
 echo Unzip terrain files...
 for f in $(find  ${output_dir} -name '*.terrain'); do
