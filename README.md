@@ -42,37 +42,71 @@ $ docker build -t terrain_tiler .
 
 ### Running
 
-Use a volume mount in the docker image to process tif files on the host machine.
+Use a volume mount named 'data' in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v [local_path_to_scripts_dir]:/app/scripts -it terrain_tiler
+$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
 ```
 
-Script process.sh is run as entrypoint.
-
-gdal_fillnodata can run by:
+The script takes as input parameters:
 
 ```
-$ python /usr/local/bin/gdal_fillnodata.py
+Syntax: sh 1_create_tiles.sh [-s|e|h|i|o]
+options:
+i Input directory - default .
+o Output directory - default tiles
+s Start zoomlevel - default 15
+e End zoomlevel - default 0
+h Print this help
 ```
 
-## Scripts
+Sample running Docker image with parameters - generate tiles for level 10 - 0 using '-s 10':
 
-Run scripts from 'scripts' folder. 
+```
+$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler -s 10
+```
 
-Prerequisites:
+Sample output:
 
-- wget installed
-
-- Docker installed
-
-- Gdal installed + Python GDAL tooling
-
-```script
-$ sh 0_download.sh
-$ sh 1_create_tiles.sh
-$ sh 2_unzip.sh
-$ sh 3_cleanup.sh
+```
+Terrain tiler 0.1
+Startup parameters: -s
+Current directory: /data
+Start: Mon Jun 19 12:20:37 UTC 2023
+Input directory: .
+Output directory: tiles
+Tif extension: TIF
+Start zoomlevel: 10
+End zoomlevel: 0
+Source SRS: EPSG:7415
+tmp directory created.
+Start gdal_fillnodata and gdalwarp on input files...
+Processing file ./M5_30GZ1.TIF...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Creating output file that is 1282P x 981L.
+Processing tmp/M5_30GZ1_filled.TIF [1/1] : 0Using internal nodata values (e.g. 3.40282e+38) for image tmp/M5_30GZ1_filled.TIF.
+Copying nodata values from source tmp/M5_30GZ1_filled.TIF to destination tmp/M5_30GZ1_filled_4326.TIF.
+...10...20...30...40...50...60...70...80...90...100 - done.
+Building virtual raster tmp/ahn.vrt...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Running ctb-tile from 10 to level 9...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Creating layer.json file...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+0...10...20...30...40...50...60...70...80...90...100 - done.
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Creating GTiff tiles for level 9...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Create vrt for GTiff tiles on level 9...
+0...10...20...30...40...50...60...70...80...90...100 - done.
+Run ctb tile on level 8-0
+0...10...20...30...40...50...60...70...80...90...100 - done.
+0...10
+Cleaning up...
+Unzip terrain files...
+End: Mon Jun 19 12:20:39 UTC 2023
+Elapsed: Elapsed Time: 2 seconds.
+End of processing
 ```
 
 ## Process
