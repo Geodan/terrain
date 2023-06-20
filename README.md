@@ -20,6 +20,16 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 
 ![image](https://github.com/Geodan/terrain/assets/538812/ecbe4c78-1fcc-424a-a564-ca001a202d48)
 
+## Getting started
+
+Download AHN3 GeoTIFF and process to terrain tiles
+
+```
+$ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
+$ unzip M5_31GN2.zip
+$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
+```
+
 ## Docker
 
 The Docker image contains:
@@ -30,9 +40,7 @@ The Docker image contains:
 
 - GDAL python tooling
 
-- shell scripts for processing tifs to terrain tiles
-
-Todo: Add a shell script to Docker image
+- shell script for processing tifs to terrain tiles
 
 ### Building
 
@@ -51,7 +59,7 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
 The script takes as input parameters:
 
 ```
-Syntax: sh 1_create_tiles.sh [-s|e|h|o]
+Syntax: [-s|e|h|o]
 options:
 o Output directory - default 'tiles'
 s Start zoomlevel - default 15
