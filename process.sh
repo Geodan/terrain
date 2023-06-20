@@ -90,7 +90,7 @@ ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.
 
 #create layer.json file
 echo Creating layer.json file...
-ctb-tile -f Mesh -q -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -v -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # start workaround for level 8 - 0
 
