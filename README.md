@@ -6,6 +6,8 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![noordwijk](https://github.com/Geodan/terrain/assets/538812/1d52b104-fa64-41be-b524-8b0a669ac842)
 
+Docker image: https://hub.docker.com/repository/docker/geodan/terraintiler
+
 ## Input
 
 - 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
@@ -22,19 +24,25 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 
 ## Getting started
 
-Download AHN3 GeoTIFF and process to terrain tiles On Linux:
+Download AHN3 GeoTIFF and process to terrain tiles. 
 
 ```
 $ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
 $ unzip M5_31GN2.zip
-$ docker run -v $(pwd):/data -it terrain_tiler
 ```
 
-On Windows specify the path when running the Docker image:
+Tiling on Linux:
+
+$ docker run -v $(pwd):/data geodan/terraintiler
+```
+
+Tiling on Windows: specify the path when running the Docker image:
 
 ```
-$ docker run -v d:\data:/data -it terrain_tiler
+$ docker run -v d:\data:/data -it geodan/terraintiler
 ```
+
+A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
 ## Docker
 
@@ -48,18 +56,18 @@ The Docker image contains:
 
 - shell script for processing tifs to terrain tiles
 
-### Building
+## Building
 
 ```
-$ docker build -t terrain_tiler .
+$ docker build -t geodan/terraintiler .
 ```
 
-### Running
+## Running
 
 Use a volume mount named 'data' in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
+$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
 ```
 
 The script takes as input parameters:
@@ -76,7 +84,7 @@ h Print this help
 Sample running Docker image with parameters - generate tiles for level 10 - 0 using '-s 10':
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler -s 10
+$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler -s 10
 ```
 
 Sample output:
