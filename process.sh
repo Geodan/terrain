@@ -104,7 +104,7 @@ gdalbuildvrt -q ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
 echo Run ctb tile on level 8-0
-ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -c 1 -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
 
 # end workaround for level 8 - 0
 echo Cleaning up...
