@@ -55,7 +55,7 @@ The Docker image contains:
 
 - GDAL python tooling
 
-- Shell script for processing tifs to terrain tiles (process.sh)
+- Shell script for processing tifs to terrain tiles [process.sh](process.sh)
 
 ## Building
 
