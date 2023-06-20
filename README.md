@@ -22,12 +22,18 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 
 ## Getting started
 
-Download AHN3 GeoTIFF and process to terrain tiles
+Download AHN3 GeoTIFF and process to terrain tiles On Linux:
 
 ```
 $ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
 $ unzip M5_31GN2.zip
-$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
+$ docker run -v $(pwd):/data -it terrain_tiler
+```
+
+On Windows specify the path when running the Docker image:
+
+```
+$ docker run -v d:\data:/data -it terrain_tiler
 ```
 
 ## Docker

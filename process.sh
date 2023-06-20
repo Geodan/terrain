@@ -67,8 +67,7 @@ then
 fi
 
 mkdir -p "$output_dir"
-echo $output_dir directory created.
-
+echo Directory created: $output_dir
 
 echo Start gdal_fillnodata and gdalwarp on input files...
 for f in $(find *.${tif_extension}); do
