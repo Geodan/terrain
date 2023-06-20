@@ -49,13 +49,13 @@ A subfolder 'tiles' will be created containing  file layer json and a set of .te
 
 The Docker image contains:
 
-- ctb-tile
+- ctb-tile (https://github.com/geo-data/cesium-terrain-builder)
 
-- GDAL
+- GDAL (https://github.com/OSGeo/gdal)
 
 - GDAL python tooling
 
-- shell script for processing tifs to terrain tiles
+- Shell script for processing tifs to terrain tiles (process.sh)
 
 ## Building
 
