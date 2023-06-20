@@ -33,6 +33,7 @@ $ unzip M5_31GN2.zip
 
 Tiling on Linux:
 
+```
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
