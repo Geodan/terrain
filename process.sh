@@ -90,7 +90,7 @@ ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.
 
 #create layer.json file
 echo Creating layer.json file...
-ctb-tile -f Mesh -v -C -N -e ${end_zoom} -s ${start_zoom} -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -q -C -N -e ${end_zoom} -s ${start_zoom} -c 1 -l -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 # start workaround for level 8 - 0
 
@@ -104,7 +104,7 @@ gdalbuildvrt -q ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
 
 # Make terrain tiles for level 8-0 
 echo Run ctb tile on level 8-0
-ctb-tile -f Mesh -C -N -e ${end_zoom} -c 1 -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
 
 # end workaround for level 8 - 0
 echo Cleaning up...
