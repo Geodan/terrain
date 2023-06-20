@@ -20,6 +20,22 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 
 ![image](https://github.com/Geodan/terrain/assets/538812/ecbe4c78-1fcc-424a-a564-ca001a202d48)
 
+## Getting started
+
+Download AHN3 GeoTIFF and process to terrain tiles On Linux:
+
+```
+$ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
+$ unzip M5_31GN2.zip
+$ docker run -v $(pwd):/data -it terrain_tiler
+```
+
+On Windows specify the path when running the Docker image:
+
+```
+$ docker run -v d:\data:/data -it terrain_tiler
+```
+
 ## Docker
 
 The Docker image contains:
@@ -30,9 +46,7 @@ The Docker image contains:
 
 - GDAL python tooling
 
-- shell scripts for processing tifs to terrain tiles
-
-Todo: Add a shell script to Docker image
+- shell script for processing tifs to terrain tiles
 
 ### Building
 
@@ -42,37 +56,57 @@ $ docker build -t terrain_tiler .
 
 ### Running
 
-Use a volume mount in the docker image to process tif files on the host machine.
+Use a volume mount named 'data' in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v [local_path_to_scripts_dir]:/app/scripts -it terrain_tiler
+$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler
 ```
 
-Script process.sh is run as entrypoint.
-
-gdal_fillnodata can run by:
+The script takes as input parameters:
 
 ```
-$ python /usr/local/bin/gdal_fillnodata.py
+Syntax: [-s|e|h|o]
+options:
+o Output directory - default 'tiles'
+s Start zoomlevel - default 15
+e End zoomlevel - default 0
+h Print this help
 ```
 
-## Scripts
+Sample running Docker image with parameters - generate tiles for level 10 - 0 using '-s 10':
 
-Run scripts from 'scripts' folder. 
+```
+$ docker run -v [local_path_to_tiffs_dir]:/data -it terrain_tiler -s 10
+```
 
-Prerequisites:
+Sample output:
 
-- wget installed
-
-- Docker installed
-
-- Gdal installed + Python GDAL tooling
-
-```script
-$ sh 0_download.sh
-$ sh 1_create_tiles.sh
-$ sh 2_unzip.sh
-$ sh 3_cleanup.sh
+```
+Terrain tiler 0.1
+Startup parameters: -s
+Current directory: /data
+Start: Mon Jun 19 13:19:55 UTC 2023
+Output directory: tiles
+Tif extension: TIF
+Start zoomlevel: 10
+End zoomlevel: 0
+Source SRS: EPSG:7415
+tmp directory created.
+Delete output directory...
+tiles directory created.
+Start gdal_fillnodata and gdalwarp on input files...
+Processing file M5_30GZ1.TIF...
+Building virtual raster tmp/ahn.vrt...
+Running ctb-tile from 10 to level 9...
+Creating layer.json file...
+Creating GTiff tiles for level 9...
+Create vrt for GTiff tiles on level 9...
+Run ctb tile on level 8-0
+Cleaning up...
+Unzip terrain files...
+End: Mon Jun 19 13:19:56 UTC 2023
+Elapsed time: 1 seconds.
+End of processing`
 ```
 
 ## Process
