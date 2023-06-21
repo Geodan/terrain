@@ -18,7 +18,7 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: sh 1_create_tiles.sh '[-s|e|h|o]'
+   echo Syntax: '[-s|e|h|o]'
    echo options:
    echo o     Output directory - default $output_dir
    echo s     Start zoomlevel - default $start_zoom
