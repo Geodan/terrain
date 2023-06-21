@@ -58,7 +58,9 @@ then
 fi
 
 # Check if input directory has .tif files
-if ! ls *.${tif_extension} >/dev/null 2>&1;
+tiffs=`ls *.${tif_extension} | wc -l`
+
+if ! [ $((tiffs)) -gt 0 ]
 then
     echo Error input directory does not contain ${tif_extension} files.
     echo End of processing
@@ -82,9 +84,9 @@ fi
 mkdir -p "$output_dir"
 echo Directory created: $output_dir
 
-echo Start gdal_fillnodata and gdalwarp on input files...
+echo Start processing ${tiffs} GeoTIFFS...
 for f in $(find *.${tif_extension}); do
-    echo "Processing file $f..."
+    echo -ne "$f\033[0K\r"
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
