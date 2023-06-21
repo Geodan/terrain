@@ -10,8 +10,7 @@ tif_extension=TIF
 s_srs=EPSG:7415
 
 # Sample reading parameter
-echo Terrain tiler 0.1
-echo Current directory: $PWD
+echo Terrain tiler 0.2
 start_time=$(date +%s)
 echo Start: $(date)
 
@@ -22,8 +21,8 @@ print_usage()
    echo options:
    echo c     Source s_srs - default $s_srs
    echo o     Output directory - default $output_dir
-   echo b     Break zoomlevel - default $break_zoom
    echo s     Start zoomlevel - default $start_zoom
+   echo b     Break zoomlevel - default $break_zoom
    echo e     End zoomlevel - default $end_zoom
    echo h     Print this help
    echo
