@@ -58,7 +58,7 @@ then
 fi
 
 # Check if input directory has .tif files
-tiffs=`ls *.${tif_extension} | wc -l`
+tiffs=`ls *.${tif_extension} 2> /dev/nul | wc -l`
 
 if ! [ $((tiffs)) -gt 0 ]
 then
