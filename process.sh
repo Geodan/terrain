@@ -4,13 +4,13 @@
 output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
+break_zoom=9
 end_zoom=0
 tif_extension=TIF
 s_srs=EPSG:7415
 
 # Sample reading parameter
 echo Terrain tiler 0.1
-echo Startup parameters: $1
 echo Current directory: $PWD
 start_time=$(date +%s)
 echo Start: $(date)
@@ -18,10 +18,11 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|s|e|o|h]'
+   echo Syntax: '[-c|s|b|e|o|h]'
    echo options:
    echo c     Source s_srs - default $s_srs
    echo o     Output directory - default $output_dir
+   echo b     Break zoomlevel - default $break_zoom
    echo s     Start zoomlevel - default $start_zoom
    echo e     End zoomlevel - default $end_zoom
    echo h     Print this help
@@ -29,12 +30,13 @@ print_usage()
 }
 
 # Parse input arguments (flags)
-while getopts c:s:e:o:h flag
+while getopts c:s:e:b:o:h flag
 do
     case $flag in
         c) s_srs=$OPTARG;;
         o) output_dir=$OPTARG;;
         s) start_zoom=$OPTARG;;
+        b) break_zoom=$OPTARG;;
         e) end_zoom=$OPTARG;;
         h) print_usage; exit 0;;
     esac
@@ -43,8 +45,18 @@ done
 echo Output directory: $output_dir
 echo Tif extension: $tif_extension
 echo Start zoomlevel: $start_zoom
+echo Break zoomlevel: $break_zoom
 echo End zoomlevel: $end_zoom
 echo Source SRS: $s_srs
+
+# check if $start_zoom, $break_zoom and $end_zoom are in order
+# if ((start_zoom < end_zoom)); then
+if ! ([ $start_zoom -gt $break_zoom ] && [ $break_zoom -gt $end_zoom ])
+then
+    echo Error: Zoom levels not in decreasing order: $start_zoom, $break_zoom, $end_zoom
+    echo End of processing
+    exit 1
+fi
 
 # Check if input directory has .tif files
 if ! ls *.${tif_extension} >/dev/null 2>&1;
@@ -86,9 +98,9 @@ done
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
 
-# create quantized mesh tiles for level start_zoom-9 using ctb-tile
-echo Running ctb-tile from ${start_zoom} to level 9...
-ctb-tile -f Mesh -C -N -e 9 -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.vrt
+# create quantized mesh tiles for level start_zoom to break_zoom (9) using ctb-tile
+echo Running ctb-tile from ${start_zoom} to level ${break_zoom}...
+ctb-tile -f Mesh -C -N -e ${break_zoom} -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.vrt
 
 #create layer.json file
 echo Creating layer.json file...
@@ -96,19 +108,19 @@ ctb-tile -f Mesh -q -C -N -e ${end_zoom} -s ${start_zoom} -c 1 -l -o ${output_di
 
 # start workaround for level 8 - 0
 
-# generate GeoTIFF tiles on level 9
-echo Creating GTiff tiles for level 9...
-ctb-tile --output-format GTiff --output-dir ${tmp_dir} -q -s 9 -e 9 ${tmp_dir}/ahn.vrt
+# generate GeoTIFF tiles on level break_zoom
+echo Creating GTiff tiles for level ${break_zoom}...
+ctb-tile --output-format GTiff --output-dir ${tmp_dir} -q -s ${break_zoom} -e ${break_zoom} ${tmp_dir}/ahn.vrt
 
-# create VRT for GeoTIFF tiles on level 9
-echo Create vrt for GTiff tiles on level 9...
-gdalbuildvrt -q ${tmp_dir}/level9.vrt ./${tmp_dir}/9/*/*.tif
+# create VRT for GeoTIFF tiles on level break_zoom
+echo Create vrt for GTiff tiles on level ${break_zoom}...
+gdalbuildvrt -q ${tmp_dir}/level${break_zoom}.vrt ./${tmp_dir}/${break_zoom}/*/*.tif
 
-# Make terrain tiles for level 8-0 
-echo Run ctb tile on level 8-0
-ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s 8 -o ${output_dir} ${tmp_dir}/level9.vrt
+# Make terrain tiles for level ${break_zoom}-1 to 0 
+echo Run ctb tile on level $((break_zoom-1)) to 0
+ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s $((break_zoom-1)) -o ${output_dir} ${tmp_dir}/level${break_zoom}.vrt
 
-# end workaround for level 8 - 0
+# end workaround for level break_zoom - 0
 echo Cleaning up...
 rm -r $tmp_dir 
 
