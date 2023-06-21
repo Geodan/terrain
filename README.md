@@ -74,9 +74,11 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
 The script takes as input parameters:
 
 ```
-Syntax: [-s|e|h|o]
+Syntax: [-c|s|b|e|o|h]
 options:
-o Output directory - default 'tiles'
+c Source s_srs - default EPSG:7415
+o Output directory - default tiles
+b Break zoomlevel - default 9
 s Start zoomlevel - default 15
 e End zoomlevel - default 0
 h Print this help
@@ -91,31 +93,30 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler -s 10
 Sample output:
 
 ```
-Terrain tiler 0.1
-Startup parameters: -s
-Current directory: /data
-Start: Mon Jun 19 13:19:55 UTC 2023
+Terrain tiler 0.2
+Start: Wed Jun 21 09:24:39 UTC 2023
 Output directory: tiles
 Tif extension: TIF
-Start zoomlevel: 10
+Start zoomlevel: 15
+Break zoomlevel: 9
 End zoomlevel: 0
 Source SRS: EPSG:7415
 tmp directory created.
 Delete output directory...
-tiles directory created.
+Directory created: tiles
 Start gdal_fillnodata and gdalwarp on input files...
-Processing file M5_30GZ1.TIF...
+Processing file M5_02HZ1.TIF...
 Building virtual raster tmp/ahn.vrt...
-Running ctb-tile from 10 to level 9...
+Running ctb-tile from 15 to level 9...
 Creating layer.json file...
 Creating GTiff tiles for level 9...
 Create vrt for GTiff tiles on level 9...
-Run ctb tile on level 8-0
+Run ctb tile on level 8 to 0
 Cleaning up...
 Unzip terrain files...
-End: Mon Jun 19 13:19:56 UTC 2023
-Elapsed time: 1 seconds.
-End of processing`
+End: Wed Jun 21 09:24:45 UTC 2023
+Elapsed time: 6 seconds.
+End of processing
 ```
 
 ## Process
