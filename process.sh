@@ -6,7 +6,6 @@ tmp_dir=tmp
 start_zoom=15
 break_zoom=9
 end_zoom=0
-tif_extension=TIF
 s_srs=EPSG:7415
 
 # Sample reading parameter
@@ -42,7 +41,6 @@ do
 done
 
 echo Output directory: $output_dir
-echo Tif extension: $tif_extension
 echo Start zoomlevel: $start_zoom
 echo Break zoomlevel: $break_zoom
 echo End zoomlevel: $end_zoom
@@ -58,11 +56,11 @@ then
 fi
 
 # Check if input directory has .tif files
-tiffs=`ls *.${tif_extension} 2> /dev/nul | wc -l`
+tiffs=`find . -maxdepth 1 -type f -iname *.tif 2> /dev/nul | wc -l`
 
 if ! [ $((tiffs)) -gt 0 ]
 then
-    echo Error input directory does not contain ${tif_extension} files.
+    echo Error input directory does not contain .TIF or .tif files.
     echo End of processing
     exit 1
 fi
@@ -85,19 +83,19 @@ mkdir -p "$output_dir"
 echo Directory created: $output_dir
 
 echo Start processing ${tiffs} GeoTIFFS...
-for f in $(find *.${tif_extension}); do
+for f in $(find . -maxdepth 1 -type f -iname *.tif); do
     echo -ne "$f\033[0K\r"
     f_out=$(basename $f)  
     filename="${f_out%.*}"
 
-    gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.$tif_extension
+    gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.tif
 
-    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.${tif_extension} ${tmp_dir}/${filename}_filled_4326.${tif_extension}
-    rm ${tmp_dir}/${filename}_filled.${tif_extension}
+    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
+    rm ${tmp_dir}/${filename}_filled.tif
 done
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.${tif_extension} 
+gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
 
 # create quantized mesh tiles for level start_zoom to break_zoom (9) using ctb-tile
 echo Running ctb-tile from ${start_zoom} to level ${break_zoom}...
