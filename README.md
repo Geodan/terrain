@@ -31,6 +31,9 @@ $ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
 $ unzip M5_31GN2.zip
 ```
 
+![image](https://github.com/Geodan/terrain/assets/538812/49ec3561-db50-4e93-9dbd-aa49177e76a0)
+
+
 Tiling on Linux:
 
 ```
