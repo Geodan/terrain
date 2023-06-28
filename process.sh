@@ -56,7 +56,7 @@ then
 fi
 
 # Check if input directory has .tif files
-tiffs=`find . -maxdepth 1 -type f -iname *.tif 2> /dev/nul | wc -l`
+tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/nul | wc -l`
 
 if ! [ $((tiffs)) -gt 0 ]
 then
@@ -83,10 +83,11 @@ mkdir -p "$output_dir"
 echo Directory created: $output_dir
 
 echo Start processing ${tiffs} GeoTIFFS...
-for f in $(find . -maxdepth 1 -type f -iname *.tif); do
-    echo -ne "$f\033[0K\r"
-    f_out=$(basename $f)  
+for f in $(find ./ -maxdepth 1 -type f -iname '*.tif'); do
+    f_out=$(basename $f)
     filename="${f_out%.*}"
+
+    echo Processing $filename...
 
     gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.tif
 
