@@ -144,7 +144,7 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
 ```
 
 ```
-Syntax: [-c|s|b|e|o|h]
+Syntax: [-s|b|e|o|h]
 options:
 o Output directory - default tiles
 b Break zoomlevel - default 9

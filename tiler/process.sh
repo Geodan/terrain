@@ -16,10 +16,10 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|b|e|o|h]'
+   echo Syntax: '[b|s|e|o|h]'
    echo options:
-   echo c     Source s_srs - default $s_srs
    echo o     Output directory - default $output_dir
+   echo s     Start zoomlevel - default $start_zoom   
    echo b     Break zoomlevel - default $break_zoom
    echo e     End zoomlevel - default $end_zoom
    echo h     Print this help
@@ -27,7 +27,7 @@ print_usage()
 }
 
 # Parse input arguments (flags)
-while getopts c:e:b:o:h flag
+while getopts s:e:b:o:h flag
 do
     case $flag in
         o) output_dir=$OPTARG;;
