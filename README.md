@@ -54,6 +54,16 @@ $ docker run -v d:\data:/data -it geodan/terraintiler
 
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
+Terrain tiles can be used in CesiumJS as follows:
+
+```javascript
+var terrainProvider = new Cesium.CesiumTerrainProvider({
+    url : './tiles'
+});
+viewer.scene.terrainProvider = terrainProvider;
+viewer.scene.globe.depthTestAgainstTerrain=true;
+```
+
 ## Docker
 
 The Warp Docker image contains a recent version of GDAL (3.7) and shell script for processing (gdal_fillnodata, gdalwarp, gdalbuildvrt).
