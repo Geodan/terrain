@@ -83,6 +83,12 @@ Tiler Docker image:
 $ docker build -t geodan/terraintiler .
 ```
 
+To build the images together use:
+
+```
+$ sh build_all.sh
+```
+
 ## Running
 
 1] Warp
