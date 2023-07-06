@@ -25,8 +25,6 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNDc1ZjQwMS1hOGI2LTQyNmUtYmYxMi1jODlhNDNlMjViZTkiLCJpZCI6NDc4OSwic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0MTYyNTg3OX0.mNoGLdYuwqsnRRkQtdYNMbJfMBoZF2hPkbc4SRVVqNw';
-  
     const esri = new Cesium.ArcGisMapServerImageryProvider({
       url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
     });
@@ -40,7 +38,6 @@
     });
     viewer.scene.terrainProvider = terrainProvider;
     viewer.scene.globe.enableLighting = true;
-    viewer.scene.globe.terrainExaggeration = 10.0;
 
     // zoom to texel...
     viewer.camera.setView({
