@@ -31,7 +31,7 @@ https://geodan.github.io/terrain/samples/heuvelrug/
 Download AHN3 GeoTIFF and process to terrain tiles. 
 
 ```
-$ wget https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
+$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
 $ unzip M5_31GN2.zip
 ```
 
