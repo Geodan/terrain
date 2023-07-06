@@ -19,7 +19,14 @@ jobs:
         
         
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag geodan/terraintiler:latest
-    - name: Publish the Docker image
-      run: docker push geodan/terraintiler:latest
+    - name: Build the Docker images
+      run: |
+        cd tiler 
+        docker build . -t geodan/terraintiler
+        cd ../warp
+        docker build . -t geodan/terrainwarp
+
+    - name: Publish the Docker images
+      run: | 
+         docker push geodan/terraintiler
+         docker push geodan/terrainwarp

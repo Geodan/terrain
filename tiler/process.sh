@@ -1,26 +1,25 @@
 #!/bin/bash
 
+version=0.3
+
 # Set default values 
 output_dir=tiles
 tmp_dir=tmp
 start_zoom=15
 break_zoom=9
 end_zoom=0
-s_srs=EPSG:7415
-
 # Sample reading parameter
-echo Terrain tiler 0.2
+echo Terrain tiler $version - Step 2/2 Tiling
 start_time=$(date +%s)
 echo Start: $(date)
 
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|s|b|e|o|h]'
+   echo Syntax: '[b|s|e|o|h]'
    echo options:
-   echo c     Source s_srs - default $s_srs
    echo o     Output directory - default $output_dir
-   echo s     Start zoomlevel - default $start_zoom
+   echo s     Start zoomlevel - default $start_zoom   
    echo b     Break zoomlevel - default $break_zoom
    echo e     End zoomlevel - default $end_zoom
    echo h     Print this help
@@ -28,10 +27,9 @@ print_usage()
 }
 
 # Parse input arguments (flags)
-while getopts c:s:e:b:o:h flag
+while getopts s:e:b:o:h flag
 do
     case $flag in
-        c) s_srs=$OPTARG;;
         o) output_dir=$OPTARG;;
         s) start_zoom=$OPTARG;;
         b) break_zoom=$OPTARG;;
@@ -44,7 +42,25 @@ echo Output directory: $output_dir
 echo Start zoomlevel: $start_zoom
 echo Break zoomlevel: $break_zoom
 echo End zoomlevel: $end_zoom
-echo Source SRS: $s_srs
+
+# Check on tmp dir
+if [ ! -d "$tmp_dir" ];
+then
+    echo Missing subdirectory: $tmp_dir
+    echo Run terrainwarp first
+    echo exit process
+    exit 1
+fi
+
+# Check on ahn.vrt in tmp dir
+if [ ! -f "${tmp_dir}/ahn.vrt" ];
+then
+    echo Missing file: ahn.vrt in directory $tmp_dir
+    echo Run terrainwarp first
+    echo exit process
+    exit 1
+fi
+
 
 # check if $start_zoom, $break_zoom and $end_zoom are in order
 # if ((start_zoom < end_zoom)); then
@@ -53,23 +69,6 @@ then
     echo Error: Zoom levels not in decreasing order: $start_zoom, $break_zoom, $end_zoom
     echo End of processing
     exit 1
-fi
-
-# Check if input directory has .tif files
-tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/nul | wc -l`
-
-if ! [ $((tiffs)) -gt 0 ]
-then
-    echo Error input directory does not contain .TIF or .tif files.
-    echo End of processing
-    exit 1
-fi
-
-# Create tmp directory
-if [ ! -d "$tmp_dir" ];
-then
-    mkdir -p "$tmp_dir"
-    echo $tmp_dir directory created.
 fi
 
 # Create output directory
@@ -81,22 +80,6 @@ fi
 
 mkdir -p "$output_dir"
 echo Directory created: $output_dir
-
-echo Start processing ${tiffs} GeoTIFFS...
-for f in $(find ./ -maxdepth 1 -type f -iname '*.tif'); do
-    f_out=$(basename $f)
-    filename="${f_out%.*}"
-
-    echo Processing $filename...
-
-    gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.tif
-
-    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
-    rm ${tmp_dir}/${filename}_filled.tif
-done
-
-echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
 
 # create quantized mesh tiles for level start_zoom to break_zoom (9) using ctb-tile
 echo Running ctb-tile from ${start_zoom} to level ${break_zoom}...

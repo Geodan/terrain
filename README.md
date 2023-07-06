@@ -6,7 +6,11 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![noordwijk](https://github.com/Geodan/terrain/assets/538812/1d52b104-fa64-41be-b524-8b0a669ac842)
 
-Docker image: https://hub.docker.com/repository/docker/geodan/terraintiler
+Docker images: 
+
+- https://hub.docker.com/repository/docker/geodan/terrainwarp
+
+- https://hub.docker.com/repository/docker/geodan/terraintiler
 
 ## Input
 
@@ -37,20 +41,34 @@ $ unzip M5_31GN2.zip
 Tiling on Linux:
 
 ```
+$ docker run -v $(pwd):/data geodan/terrainwarp
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
 Tiling on Windows: specify the path when running the Docker image:
 
 ```
+$ docker run -v d:\data:/data -it geodan/terrainwarp
 $ docker run -v d:\data:/data -it geodan/terraintiler
 ```
 
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
+Terrain tiles can be used in CesiumJS as follows:
+
+```javascript
+var terrainProvider = new Cesium.CesiumTerrainProvider({
+    url : './tiles'
+});
+viewer.scene.terrainProvider = terrainProvider;
+viewer.scene.globe.depthTestAgainstTerrain=true;
+```
+
 ## Docker
 
-The Docker image contains:
+The Warp Docker image contains a recent version of GDAL (3.7) and shell script for processing (gdal_fillnodata, gdalwarp, gdalbuildvrt).
+
+The Tiler Docker image contains:
 
 - ctb-tile (https://github.com/geo-data/cesium-terrain-builder)
 
@@ -62,24 +80,72 @@ The Docker image contains:
 
 ## Building
 
+
+Warp Docker image:
+
+```
+$ docker build -t geodan/terrainwarp .
+```
+
+Tiler Docker image:
+
 ```
 $ docker build -t geodan/terraintiler .
 ```
 
+To build the images together use:
+
+```
+$ sh build_all.sh
+```
+
 ## Running
+
+1] Warp
 
 Use a volume mount named 'data' in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
+$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terrainwarp
 ```
 
 The script takes as input parameters:
 
 ```
-Syntax: [-c|s|b|e|o|h]
+Syntax: [-c|h]
 options:
 c Source s_srs - default EPSG:7415
+h Print this help
+```
+
+Sample output:
+
+```
+Terrain tiler 0.3 - Warp
+Start: Wed Jul 5 12:06:39 UTC 2023
+Temp directory: tmp
+Source SRS: EPSG:7415
+tmp directory created.
+Start processing 256 GeoTIFFS...
+Processing DSM_1627_3855...
+Building virtual raster tmp/ahn.vrt...
+VRT created: tmp/ahn.vrt
+End: Wed Jul 5 12:13:33 UTC 2023
+Elapsed time: 414 seconds.
+End of processing
+```
+
+2] Tiler
+
+Running: 
+
+```
+$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
+```
+
+```
+Syntax: [-s|b|e|o|h]
+options:
 o Output directory - default tiles
 b Break zoomlevel - default 9
 s Start zoomlevel - default 15
@@ -96,20 +162,15 @@ $ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler -s 10
 Sample output:
 
 ```
-Terrain tiler 0.2
+Terrain tiler 0.3
 Start: Wed Jun 21 09:24:39 UTC 2023
 Output directory: tiles
 Tif extension: TIF
 Start zoomlevel: 15
 Break zoomlevel: 9
 End zoomlevel: 0
-Source SRS: EPSG:7415
-tmp directory created.
 Delete output directory...
 Directory created: tiles
-Start gdal_fillnodata and gdalwarp on input files...
-Processing file M5_02HZ1.TIF...
-Building virtual raster tmp/ahn.vrt...
 Running ctb-tile from 15 to level 9...
 Creating layer.json file...
 Creating GTiff tiles for level 9...
@@ -127,14 +188,18 @@ End of processing
 ```mermaid
 flowchart TD
 
-A[Start] -->|Get tif's| B(TIF's) 
-B --> C{TIFs remaining?}
-C -->|No| D[Build VRT]
-C -->|Yes| E[Select TIF]
-E --> F[Run GDAL Fill NODATA]
-F --> G[Run GDAL Warp to EPSG:4326+4979]
-G --> C
-D --> H[Run CTB-TILE]
-H --> I[Unzip terrain tiles]
-I --> J[Terrain tiles ready - end]
+subgraph Warp
+    A{Start} --> B{TIF's}
+    B --> C{TIFs remaining?}
+    C -->|No| D[Build VRT]
+    C -->|Yes| E[Select TIF]
+    E --> F[Run GDAL Fill NODATA]
+    F --> G[Run GDAL Warp to EPSG:4326+4979]
+    G --> C
+end
+subgraph Tiling
+    D --> H[Run CTB-TILE]
+    H --> I[Unzip terrain tiles]
+    I --> J[Terrain tiles ready - end]
+end
 ```
