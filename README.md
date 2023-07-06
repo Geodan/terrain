@@ -73,14 +73,13 @@ There are 2 Docker images:
 
 The Warp Docker image contains a recent version of GDAL (3.7) and shell script for processing (gdal_fillnodata, gdalwarp, gdalbuildvrt).
 
-
 2] Tiler
 
 The Tiler Docker image contains:
 
 - ctb-tile (https://github.com/geo-data/cesium-terrain-builder)
 
-- Shell script for processing tifs to terrain tiles [process.sh](process.sh)
+- Shell script for processing tifs to terrain tiles
 
 ## Building
 
@@ -109,7 +108,7 @@ $ sh build_all.sh
 Use a volume mount named 'data' in the docker image to process tif files on the host machine.
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terrainwarp
+$ docker run -v $(pwd):/data -it geodan/terrainwarp
 ```
 
 The script takes as input parameters:
