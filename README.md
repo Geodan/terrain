@@ -6,18 +6,6 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![noordwijk](https://github.com/Geodan/terrain/assets/538812/1d52b104-fa64-41be-b524-8b0a669ac842)
 
-Docker images: 
-
-- https://hub.docker.com/repository/docker/geodan/terrainwarp
-
-- https://hub.docker.com/repository/docker/geodan/terraintiler
-
-## Input
-
-- 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
-
-- 5M DTM's from [GeoJSON](https://services.arcgis.com/nSZVuSZjHpEZZbRo/arcgis/rest/services/Kaartbladen_AHN3/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=)
-
 ## Getting started
 
 Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
@@ -67,6 +55,44 @@ Result:
 
 Live demo see https://geodan.github.io/terrain/samples/heuvelrug/
 
+## Input
+
+- 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
+
+- 5M DTM's from [GeoJSON](https://services.arcgis.com/nSZVuSZjHpEZZbRo/arcgis/rest/services/Kaartbladen_AHN3/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=)
+
+## Process
+
+```mermaid
+flowchart TD
+
+subgraph Warp
+    A{Start} --> B{TIF's}
+    B --> C{TIFs remaining?}
+    C -->|No| D[Build VRT]
+    C -->|Yes| E[Select TIF]
+    E --> F[Run GDAL Fill NODATA]
+    F --> G[Run GDAL Warp to EPSG:4326+4979]
+    G --> C
+end
+subgraph Tiling
+    D --> H[Run CTB-TILE]
+    H --> I[Unzip terrain tiles]
+    I --> J[Terrain tiles ready - end]
+end
+```
+
+## Reference Systems
+
+By default the composite Dutch reference system for the input GeoTIFFS is assumed (s_srs epsg: 7415). This can be changed with option -c in geodan/terrainwarp command.
+
+EPSG:7415 is a composite of:
+
+Horizontal Reference System	EPSG:28992
+Vertical Reference System	EPSG:5709
+
+In the process the images are warped using gdalwarp to EPSG:4326+4979 (-t_srs) to be used in Cesium using the WGS84 ellipsoid model.
+
 ## Docker
 
 There are 2 Docker images:
@@ -74,6 +100,8 @@ There are 2 Docker images:
 1] Warp
 
 The Warp Docker image contains a recent version of GDAL (3.7) and shell script for processing (gdal_fillnodata, gdalwarp, gdalbuildvrt).
+
+See https://hub.docker.com/repository/docker/geodan/terrainwarp
 
 2] Tiler
 
@@ -83,25 +111,7 @@ The Tiler Docker image contains:
 
 - Shell script for processing tifs to terrain tiles
 
-## Building
-
-Warp Docker image:
-
-```
-$ docker build -t geodan/terrainwarp .
-```
-
-Tiler Docker image:
-
-```
-$ docker build -t geodan/terraintiler .
-```
-
-To build the images together use:
-
-```
-$ sh build_all.sh
-```
+See https://hub.docker.com/repository/docker/geodan/terraintiler
 
 ## Running
 
@@ -144,7 +154,7 @@ End of processing
 Running: 
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler
+$ docker run -v $(pwd):/data -it geodan/terraintiler
 ```
 
 ```
@@ -187,23 +197,23 @@ Elapsed time: 6 seconds.
 End of processing
 ```
 
-## Process
+## Building
 
-```mermaid
-flowchart TD
+Warp Docker image:
 
-subgraph Warp
-    A{Start} --> B{TIF's}
-    B --> C{TIFs remaining?}
-    C -->|No| D[Build VRT]
-    C -->|Yes| E[Select TIF]
-    E --> F[Run GDAL Fill NODATA]
-    F --> G[Run GDAL Warp to EPSG:4326+4979]
-    G --> C
-end
-subgraph Tiling
-    D --> H[Run CTB-TILE]
-    H --> I[Unzip terrain tiles]
-    I --> J[Terrain tiles ready - end]
-end
 ```
+$ docker build -t geodan/terrainwarp .
+```
+
+Tiler Docker image:
+
+```
+$ docker build -t geodan/terraintiler .
+```
+
+To build the images together use:
+
+```
+$ sh build_all.sh
+```
+
