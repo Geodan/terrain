@@ -88,9 +88,10 @@ By default the composite Dutch reference system for the input GeoTIFFS is assume
 
 EPSG:7415 is a composite of:
 
+```
 Horizontal Reference System	EPSG:28992
 Vertical Reference System	EPSG:5709
-
+```
 In the process the images are warped using gdalwarp to EPSG:4326+4979 (-t_srs) to be used in Cesium using the WGS84 ellipsoid model.
 
 ## Docker
@@ -196,6 +197,18 @@ End: Wed Jun 21 09:24:45 UTC 2023
 Elapsed time: 6 seconds.
 End of processing
 ```
+
+## Known issues
+
+In the tiling process, the following errors can occur:
+
+```
+Processing tmp/M5_30GZ1_filled.TIF [1/1] : 0Using internal nodata values (e.g. 3.40282e+38) for image tmp/M5_30GZ1_filled.TIF.
+ERROR 1: Too many points (529 out of 529) failed to transform, unable to compute output bounds.
+Warning 1: Unable to compute source region for output window 0,0,1000,1250, skipping.
+```
+
+Fix: Increase the -b option to a higher level
 
 ## Building
 
