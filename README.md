@@ -232,3 +232,6 @@ To build the images together use:
 $ sh build_all.sh
 ```
 
+## Releases
+
+2023-07-06: Release 0.3
