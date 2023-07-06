@@ -40,6 +40,8 @@ Remember for tiling on Windows fully specify the volume path.
 
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
+![image](https://github.com/Geodan/terrain/assets/538812/45a35e37-9e47-4693-9460-901667be3580)
+
 Terrain tiles can be used in CesiumJS as follows:
 
 ```javascript
