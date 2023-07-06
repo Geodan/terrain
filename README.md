@@ -179,7 +179,7 @@ h Print this help
 Sample running Docker image with parameters - generate tiles for level 10 - 0 using '-s 10':
 
 ```
-$ docker run -v [local_path_to_tiffs_dir]:/data -it geodan/terraintiler -s 10
+$ docker run -v $(pwd):/data -it geodan/terraintiler -s 10
 ```
 
 Sample output:
