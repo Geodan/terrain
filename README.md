@@ -18,25 +18,16 @@ Docker images:
 
 - 5M DTM's from [GeoJSON](https://services.arcgis.com/nSZVuSZjHpEZZbRo/arcgis/rest/services/Kaartbladen_AHN3/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=)
 
-## Samples
-
-Utrechtse Heuvelrug
-
-https://geodan.github.io/terrain/samples/heuvelrug/
-
-![image](https://github.com/Geodan/terrain/assets/538812/ecbe4c78-1fcc-424a-a564-ca001a202d48)
-
 ## Getting started
 
-Download AHN3 GeoTIFF and process to terrain tiles. 
+Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
 
 ```
-$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/ahn4/02b_DTM_5m/M5_31GN2.zip
-$ unzip M5_31GN2.zip
+$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M5_32CN2.zip
+$ unzip M5_32CN2.zip
 ```
 
-![image](https://github.com/Geodan/terrain/assets/538812/49ec3561-db50-4e93-9dbd-aa49177e76a0)
-
+![image](https://github.com/Geodan/terrain/assets/538812/44c606e5-5ba9-4864-b647-6011de630258)
 
 Tiling on Linux:
 
@@ -45,12 +36,7 @@ $ docker run -v $(pwd):/data geodan/terrainwarp
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
-Tiling on Windows: specify the path when running the Docker image:
-
-```
-$ docker run -v d:\data:/data -it geodan/terrainwarp
-$ docker run -v d:\data:/data -it geodan/terraintiler
-```
+Remmeber for tiling on Windows fully specify the volume path.
 
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
@@ -64,22 +50,39 @@ viewer.scene.terrainProvider = terrainProvider;
 viewer.scene.globe.depthTestAgainstTerrain=true;
 ```
 
+Download sample client and start webserver:
+
+```
+$ wget https://raw.githubusercontent.com/Geodan/terrain/main/samples/heuvelrug/index.html
+$ python -m http.server
+```
+
+Open browser on port 8000.
+
+Result:
+
+![image](https://github.com/Geodan/terrain/assets/538812/cdd0f943-e534-4ff0-bc2f-7e0a79b4e59e)
+
+Live demo see https://geodan.github.io/terrain/samples/heuvelrug/
+
 ## Docker
 
+There are 2 Docker images:
+
+1] Warp
+
 The Warp Docker image contains a recent version of GDAL (3.7) and shell script for processing (gdal_fillnodata, gdalwarp, gdalbuildvrt).
+
+
+2] Tiler
 
 The Tiler Docker image contains:
 
 - ctb-tile (https://github.com/geo-data/cesium-terrain-builder)
 
-- GDAL (https://github.com/OSGeo/gdal)
-
-- GDAL python tooling
-
 - Shell script for processing tifs to terrain tiles [process.sh](process.sh)
 
 ## Building
-
 
 Warp Docker image:
 
