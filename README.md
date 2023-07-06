@@ -36,7 +36,7 @@ $ docker run -v $(pwd):/data geodan/terrainwarp
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
-Remmeber for tiling on Windows fully specify the volume path.
+Remember for tiling on Windows fully specify the volume path.
 
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
 
