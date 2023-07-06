@@ -10,6 +10,8 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
 
+![terraindemo](https://github.com/Geodan/terrain/assets/538812/6243c18a-4369-4118-866b-73b4b99ed6a4)
+
 ```
 $ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M5_32CN2.zip
 $ unzip M5_32CN2.zip
