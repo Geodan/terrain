@@ -57,6 +57,12 @@ Result:
 
 Live demo see https://geodan.github.io/terrain/samples/heuvelrug/
 
+Sample content of terrain tile at level 15:
+
+[samples/heuvelrug/heuvelrug_15_33730_25874.geojson](samples/heuvelrug/heuvelrug_15_33730_25874.geojson)
+
+![image](https://github.com/Geodan/terrain/assets/538812/d8f2a7b8-a5f6-4d02-8c0a-4a989e63ef70)
+
 ## Input
 
 - 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
