@@ -135,9 +135,10 @@ $ docker run -v $(pwd):/data -it geodan/terrainwarp
 The script takes as input parameters:
 
 ```
-Syntax: [-c|h]
+Syntax: [-c|m|h]
 options:
 c Source s_srs - default EPSG:7415
+m fillnodata maxdistance (in pixels) - default 100
 h Print this help
 ```
 
@@ -148,6 +149,7 @@ Terrain tiler 0.3 - Warp
 Start: Wed Jul 5 12:06:39 UTC 2023
 Temp directory: tmp
 Source SRS: EPSG:7415
+Fillnodata maxdistance: 100
 tmp directory created.
 Start processing 256 GeoTIFFS...
 Processing DSM_1627_3855...
@@ -238,6 +240,8 @@ To build the images together use:
 $ sh build_all.sh
 ```
 
-## Releases
+## History
 
-2023-07-06: Release 0.3
+2023-07-17: release 0.3.1 - add -m option in warp for gdal_fillnodata max_distance
+
+2023-07-06: release 0.3 - split process in tiler and warp  
