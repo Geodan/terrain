@@ -12,7 +12,7 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|h|m]'
+   echo Syntax: '[-c|m|h]'
    echo options:
    echo c     Source s_srs - default $s_srs
    echo m     fillnodata maxdistance in pixels - default $md
@@ -21,7 +21,7 @@ print_usage()
 }
 
 # Parse input arguments (flags)
-while getopts c:h:m flag
+while getopts c:m:h flag
 do
     case $flag in
         c) s_srs=$OPTARG;;
