@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3
+version=0.3.1
 
 # Set default values 
 output_dir=tiles
