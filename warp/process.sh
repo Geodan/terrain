@@ -1,8 +1,9 @@
 #!/bin/bash
 
-version=0.3
+version=0.3.1
 tmp_dir=tmp
 s_srs=EPSG:7415
+md=100
 
 echo Terrain tiler $version - Warp
 start_time=$(date +%s)
@@ -11,24 +12,27 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|h]'
+   echo Syntax: '[-c|h|m]'
    echo options:
    echo c     Source s_srs - default $s_srs
+   echo m     fillnodata maxdistance in pixels - default $md
    echo h     Print this help
    echo
 }
 
 # Parse input arguments (flags)
-while getopts c:h flag
+while getopts c:h:m flag
 do
     case $flag in
         c) s_srs=$OPTARG;;
+        m) md=$OPTARG;;
         h) print_usage; exit 0;;
     esac
 done
 
 echo Temp directory: $tmp_dir
 echo Source SRS: $s_srs
+echo Fillnodata maxdistance: $md
 
 # Check if input directory has .tif files
 tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/nul | wc -l`
@@ -57,7 +61,7 @@ for f in $(find ./ -maxdepth 1 -type f -iname '*.tif'); do
 
     echo Processing $filename...
 
-    gdal_fillnodata.py -q $f ${tmp_dir}/${filename}_filled.tif
+    gdal_fillnodata.py -q -md ${md} $f ${tmp_dir}/${filename}_filled.tif
 
     gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
     rm ${tmp_dir}/${filename}_filled.tif
