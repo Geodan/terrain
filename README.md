@@ -63,6 +63,12 @@ Sample content of terrain tile at level 15:
 
 ![image](https://github.com/Geodan/terrain/assets/538812/d8f2a7b8-a5f6-4d02-8c0a-4a989e63ef70)
 
+## Live Samples
+
+1] Heuvelrug - AHN3 https://geodan.github.io/terrain/samples/heuvelrug/
+
+2] Maastricht - AHN4 https://geodan.github.io/terrain/samples/maastricht/
+
 ## Input
 
 - 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
