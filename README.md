@@ -6,6 +6,14 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![noordwijk](https://github.com/Geodan/terrain/assets/538812/1d52b104-fa64-41be-b524-8b0a669ac842)
 
+## Live Samples
+
+1] Heuvelrug - AHN3 https://geodan.github.io/terrain/samples/heuvelrug/
+
+2] Maastricht - AHN4 https://geodan.github.io/terrain/samples/maastricht/
+
+![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
+
 ## Getting started
 
 Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
@@ -62,12 +70,6 @@ Sample content of terrain tile at level 15:
 [samples/heuvelrug/heuvelrug_15_33730_25874.geojson](samples/heuvelrug/heuvelrug_15_33730_25874.geojson)
 
 ![image](https://github.com/Geodan/terrain/assets/538812/d8f2a7b8-a5f6-4d02-8c0a-4a989e63ef70)
-
-## Live Samples
-
-1] Heuvelrug - AHN3 https://geodan.github.io/terrain/samples/heuvelrug/
-
-2] Maastricht - AHN4 https://geodan.github.io/terrain/samples/maastricht/
 
 ## Input
 
