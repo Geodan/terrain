@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.1
+version=0.3.2
 
 # Set default values 
 output_dir=tiles
@@ -83,25 +83,27 @@ echo Directory created: $output_dir
 
 # create quantized mesh tiles for level start_zoom to break_zoom (9) using ctb-tile
 echo Running ctb-tile from ${start_zoom} to level ${break_zoom}...
-ctb-tile -f Mesh -C -N -e ${break_zoom} -s ${start_zoom} -q -o ${output_dir} ${tmp_dir}/ahn.vrt
-
+ctb-tile -v -f Mesh -C -N -e ${break_zoom} -s ${start_zoom} -o ${output_dir} ${tmp_dir}/ahn.vrt
+echo 
 #create layer.json file
 echo Creating layer.json file...
-ctb-tile -f Mesh -q -C -N -e ${end_zoom} -s ${start_zoom} -c 1 -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+ctb-tile -f Mesh -C -N -e ${end_zoom} -s ${start_zoom} -c 1 -l -o ${output_dir} ${tmp_dir}/ahn.vrt
+echo 
 
 # start workaround for level 8 - 0
 
 # generate GeoTIFF tiles on level break_zoom
 echo Creating GTiff tiles for level ${break_zoom}...
-ctb-tile --output-format GTiff --output-dir ${tmp_dir} -q -s ${break_zoom} -e ${break_zoom} ${tmp_dir}/ahn.vrt
+ctb-tile -v --output-format GTiff --output-dir ${tmp_dir} -s ${break_zoom} -e ${break_zoom} ${tmp_dir}/ahn.vrt
+echo 
 
 # create VRT for GeoTIFF tiles on level break_zoom
 echo Create vrt for GTiff tiles on level ${break_zoom}...
-gdalbuildvrt -q ${tmp_dir}/level${break_zoom}.vrt ./${tmp_dir}/${break_zoom}/*/*.tif
+gdalbuildvrt ${tmp_dir}/level${break_zoom}.vrt ./${tmp_dir}/${break_zoom}/*/*.tif
 
 # Make terrain tiles for level ${break_zoom}-1 to 0 
 echo Run ctb tile on level $((break_zoom-1)) to 0
-ctb-tile -f Mesh -C -N -e ${end_zoom} -q -s $((break_zoom-1)) -o ${output_dir} ${tmp_dir}/level${break_zoom}.vrt
+ctb-tile -v -f Mesh -C -N -e ${end_zoom} -s $((break_zoom-1)) -o ${output_dir} ${tmp_dir}/level${break_zoom}.vrt
 
 # end workaround for level break_zoom - 0
 echo Cleaning up...

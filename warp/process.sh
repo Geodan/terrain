@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.1
+version=0.3.2
 tmp_dir=tmp
 s_srs=EPSG:7415
 md=100
@@ -61,14 +61,14 @@ for f in $(find ./ -maxdepth 1 -type f -iname '*.tif'); do
 
     echo Processing $filename...
 
-    gdal_fillnodata.py -q -md ${md} $f ${tmp_dir}/${filename}_filled.tif
+    gdal_fillnodata.py -md ${md} $f ${tmp_dir}/${filename}_filled.tif
 
-    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
+    gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
     rm ${tmp_dir}/${filename}_filled.tif
 done
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
+gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
 echo VRT created: ${tmp_dir}/ahn.vrt
 
 end_time=$(date +%s)
