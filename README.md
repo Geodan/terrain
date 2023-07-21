@@ -250,6 +250,8 @@ $ sh build_all.sh
 
 ## History
 
+2023-07-20: release 0.3.2: give more feedback on progress
+
 2023-07-17: release 0.3.1 - add -m option in warp for gdal_fillnodata max_distance
 
 2023-07-06: release 0.3 - split process in tiler and warp  

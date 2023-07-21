@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.1
+version=0.3.2
 tmp_dir=tmp
 s_srs=EPSG:7415
 md=100
@@ -78,7 +78,7 @@ echo $tmp_dir directory created.
 warp_tiffs
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -q -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
+gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
 echo VRT created: ${tmp_dir}/ahn.vrt
 
 end_time=$(date +%s)
