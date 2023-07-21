@@ -37,7 +37,8 @@ warp_tiff()
 warp_tiffs()
 {
     echo Start processing ${tiffs} GeoTIFFS...
-    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar -j 10 warp_tiff ${tmp_dir} ${md} ${s_srs}
+    cpu=$(lscpu | egrep "^CPU\(s\):" | sed -e "s/[^0-9]//g")
+    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar -j $cpu warp_tiff ${tmp_dir} ${md} ${s_srs}
 }
 export -f warp_tiff
 
