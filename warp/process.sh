@@ -20,6 +20,27 @@ print_usage()
    echo
 }
 
+warp_tiff()
+{
+    tmp_dir=$1
+    md=$2
+    s_srs=$3
+    tiff_file=$4
+
+    f_out=$(basename ${tiff_file})
+    filename="${f_out%.*}"
+    gdal_fillnodata.py -q -md ${md} ${tiff_file} ${tmp_dir}/${filename}_filled.tif
+    gdalwarp -q -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
+    rm ${tmp_dir}/${filename}_filled.tif
+}
+
+warp_tiffs()
+{
+    echo Start processing ${tiffs} GeoTIFFS...
+    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar ${tmp_dir} ${md} ${s_srs}
+}
+export -f warp_tiff
+
 # Parse input arguments (flags)
 while getopts c:m:h flag
 do
@@ -54,18 +75,7 @@ fi
 mkdir -p "$tmp_dir"
 echo $tmp_dir directory created.
 
-echo Start processing ${tiffs} GeoTIFFS...
-for f in $(find ./ -maxdepth 1 -type f -iname '*.tif'); do
-    f_out=$(basename $f)
-    filename="${f_out%.*}"
-
-    echo Processing $filename...
-
-    gdal_fillnodata.py -md ${md} $f ${tmp_dir}/${filename}_filled.tif
-
-    gdalwarp -s_srs $s_srs -t_srs EPSG:4326+4979 ${tmp_dir}/${filename}_filled.tif ${tmp_dir}/${filename}_filled_4326.tif
-    rm ${tmp_dir}/${filename}_filled.tif
-done
+warp_tiffs
 
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
 gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
