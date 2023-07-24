@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.2
+version=0.3.3
 tmp_dir=tmp
 s_srs=EPSG:7415
 md=100
@@ -37,7 +37,7 @@ warp_tiff()
 warp_tiffs()
 {
     echo Start processing ${tiffs} GeoTIFFS...
-    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar ${tmp_dir} ${md} ${s_srs}
+    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar warp_tiff ${tmp_dir} ${md} ${s_srs}
 }
 export -f warp_tiff
 
