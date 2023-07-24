@@ -250,6 +250,8 @@ $ sh build_all.sh
 
 ## History
 
+2023-07-24: release 0.3.3: bug fix warp 
+
 2023-07-20: release 0.3.2: give more feedback on progress
 
 2023-07-17: release 0.3.1 - add -m option in warp for gdal_fillnodata max_distance
