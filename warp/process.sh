@@ -56,7 +56,7 @@ echo Source SRS: $s_srs
 echo Fillnodata maxdistance: $md
 
 # Check if input directory has .tif files
-tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/nul | wc -l`
+tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/null | wc -l`
 
 if ! [ $((tiffs)) -gt 0 ]
 then
