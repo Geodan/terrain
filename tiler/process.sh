@@ -110,10 +110,7 @@ echo Cleaning up...
 rm -r $tmp_dir 
 
 echo Unzip terrain files...
-for f in $(find  ${output_dir} -name '*.terrain'); do
-   mv ${f} ${f}.gz
-   gunzip -f -S terrain ${f}.gz
-done
+find ${output_dir} -name '*.terrain' | parallel --bar 'mv {} {}.gz && gunzip -f -S terrain {}.gz'
 
 end_time=$(date +%s)
 echo End: $(date)
