@@ -14,6 +14,10 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
 
+3] Maastricht - AHN4 with contours https://geodan.github.io/terrain/samples/maastricht/index-elevation.html
+
+![image](https://github.com/Geodan/terrain/assets/538812/f3fcd771-29ce-4a66-b04f-22d87f09e9e4)
+
 ## Getting started
 
 Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
