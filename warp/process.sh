@@ -88,13 +88,20 @@ then
     prefix="${epsg_first_tif:1:4}"
 
     if [[ $prefix == "EPSG" ]]; then
-        # real epsg code found in first tif
-        if [[ $epsg_first_tif == *"EPSG:28992" ]]
+        if [[ $epsg_first_tif != *"EPSG:-1" ]]
         then
-            echo make s_srs epsg:7415 in case of epsg:28992
-            s_srs=$default_s_srs
+            # real epsg code found in first tif
+            if [[ $epsg_first_tif == *"EPSG:28992" ]]
+            then
+                echo make s_srs epsg:7415 in case of epsg:28992
+                s_srs=$default_s_srs
+            else
+                s_srs=$epsg_first_tif
+            fi
         else
-            s_srs=$epsg_first_tif
+            echo EPSG not found from ${first_tif}:  ${epsg_first_tif}
+            echo Exit process...
+            exit 1
         fi
     else
         # no epsg code detected, for example: '_Confidence in this match: 25 % EPSG:28992 Confidence in this match: 25 % EPSG:28991_'
