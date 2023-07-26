@@ -53,7 +53,6 @@ do
 done
 
 echo Temp directory: $tmp_dir
-echo s_srs input images: $s_srs
 echo Fillnodata maxdistance: $md
 
 # Check if input directory has .tif files

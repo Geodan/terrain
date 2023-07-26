@@ -152,7 +152,9 @@ h Print this help
 
 When option -c is not used, warp will check the EPSG code of the first GeoTIFF.
 
-- If no EPSG code is detected or the EPSG code is 28992: the default s_srs is used (EPSG:7415)
+- If no EPSG code is detected or the EPSG code is 28992: the default s_srs is used (EPSG:7415). 
+EPSG:7415 is a composite of EPSG:28992 (horiontal) and EPSG:5709 (vertical) used in the Netherlands. 
+A the vertical EPSG code is optional but needed to transform from geoid to ellipsoid.
 - In other cases: the detected EPSG code is used as s_srs
 
 Sample output:
