@@ -68,12 +68,8 @@ fi
 # Create tmp directory
 if [ -d "$tmp_dir" ];
 then
-    read -p "A directory with the name ${tmp_dir} already exists. Do you want to delete it (Y/n)? " yn
-    case $yn in
-        [yY] ) echo Delete tmp directory...; rm -r $tmp_dir;;
-        [nN] ) echo Exiting...; exit;;
-        *) echo Invalid response;;
-    esac
+    echo A directory with the name ${tmp_dir} already exists. Please remove or rename it. Exiting...
+    exit
 fi
 
 mkdir -p "$tmp_dir"
