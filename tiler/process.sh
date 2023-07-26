@@ -108,10 +108,7 @@ ctb-tile -v -f Mesh -C -N -e ${end_zoom} -s $((break_zoom-1)) -o ${output_dir} $
 # end workaround for level break_zoom - 0
 
 echo Unzip terrain files...
-for f in $(find  ${output_dir} -name '*.terrain'); do
-   mv ${f} ${f}.gz
-   gunzip -f -S terrain ${f}.gz
-done
+find ${output_dir} -name '*.terrain' | parallel --bar 'mv {} {}.gz && gunzip -f -S terrain {}.gz'
 
 end_time=$(date +%s)
 echo End: $(date)

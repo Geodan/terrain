@@ -2,7 +2,8 @@
 
 version=1.0
 tmp_dir=tmp
-s_srs=EPSG:7415
+default_s_srs=EPSG:7415
+s_srs=""
 md=100
 
 echo Terrain tiler $version - Warp
@@ -52,7 +53,6 @@ do
 done
 
 echo Temp directory: $tmp_dir
-echo Source SRS: $s_srs
 echo Fillnodata maxdistance: $md
 
 # Check if input directory has .tif files
@@ -74,6 +74,45 @@ fi
 
 mkdir -p "$tmp_dir"
 echo $tmp_dir directory created.
+
+# Check on s_srs, if not set, try to find it from first GeoTIFF
+if [[ $s_srs == "" ]]
+then
+    echo s_srs not set, trying to detect it from first GeoTIFF...
+    # get the first tif
+    first_tif=$(find ./ -maxdepth 1 -type f -iname '*.tif' | head -1)
+    # get the epsg code
+    epsg_first_tif=$(gdalsrsinfo -o epsg $first_tif)
+
+    echo EPSG of first tif: ${epsg_first_tif} 
+    prefix="${epsg_first_tif:1:4}"
+
+    if [[ $prefix == "EPSG" ]]; then
+        if [[ $epsg_first_tif != *"EPSG:-1" ]]
+        then
+            # real epsg code found in first tif
+            if [[ $epsg_first_tif == *"EPSG:28992" ]]
+            then
+                echo make s_srs epsg:7415 in case of epsg:28992
+                s_srs=$default_s_srs
+            else
+                s_srs=$epsg_first_tif
+            fi
+        else
+            echo EPSG not found from ${first_tif}:  ${epsg_first_tif}
+            echo Exit process...
+            exit 1
+        fi
+    else
+        # no epsg code detected, for example: '_Confidence in this match: 25 % EPSG:28992 Confidence in this match: 25 % EPSG:28991_'
+        # use default epsg code instead
+        echo EPSG not found from ${first_tif}:  ${epsg_first_tif}
+        echo using default s_srs: $default_s_srs
+        s_srs=$default_s_srs
+    fi
+fi
+
+echo used s_srs: $s_srs
 
 warp_tiffs
 

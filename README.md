@@ -14,6 +14,10 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
 
+3] Maastricht - AHN4 with contours https://geodan.github.io/terrain/samples/maastricht/index-elevation.html
+
+![image](https://github.com/Geodan/terrain/assets/538812/f3fcd771-29ce-4a66-b04f-22d87f09e9e4)
+
 ## Getting started
 
 Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
@@ -150,21 +154,34 @@ m fillnodata maxdistance (in pixels) - default 100
 h Print this help
 ```
 
+When option -c is not used, warp will check the EPSG code of the first GeoTIFF.
+
+- If no EPSG code is detected or the EPSG code is 28992: the default s_srs is used (EPSG:7415). 
+EPSG:7415 is a composite of EPSG:28992 (horizontal) and EPSG:5709 (vertical) used in the Netherlands. 
+A the vertical EPSG code is optional but needed to transform from geoid to ellipsoid.
+- In other cases: the detected EPSG code is used as s_srs
+
 Sample output:
 
 ```
 Terrain tiler 1.0 - Warp
-Start: Wed Jul 5 12:06:39 UTC 2023
+Start: Tue Jul 25 12:52:27 UTC 2023
 Temp directory: tmp
-Source SRS: EPSG:7415
+s_src input images:
 Fillnodata maxdistance: 100
+Delete tmp directory...
 tmp directory created.
-Start processing 256 GeoTIFFS...
-Processing DSM_1627_3855...
+s_srs not set, trying to detect it from first GeoTIFF
+EPSG of first tif: EPSG:28992
+make s_srs epsg:7415 in case of epsg:28992
+used s_srs: EPSG:7415
+Start processing 1 GeoTIFFS...
+100% 1:0=0s ./M5_32CN2.TIF
 Building virtual raster tmp/ahn.vrt...
+0...10...20...30...40...50...60...70...80...90...100 - done.
 VRT created: tmp/ahn.vrt
-End: Wed Jul 5 12:13:33 UTC 2023
-Elapsed time: 414 seconds.
+End: Tue Jul 25 12:52:28 UTC 2023
+Elapsed time: 1 seconds.
 End of processing
 ```
 
@@ -221,10 +238,12 @@ End of processing
 In the tiling process, the following errors can occur:
 
 ```
-Processing tmp/M5_30GZ1_filled.TIF [1/1] : 0Using internal nodata values (e.g. 3.40282e+38) for image tmp/M5_30GZ1_filled.TIF.
-ERROR 1: Too many points (529 out of 529) failed to transform, unable to compute output bounds.
-Warning 1: Unable to compute source region for output window 0,0,1000,1250, skipping.
+ERROR 1: Integer overflow : nSrcXSize=97201, nSrcYSize=18001
+ERROR 1: IReadBlock failed at X offset 0, Y offset 0
+ERROR 1: GetBlockRef failed at X block offset 0, Y block offset 0 Error: Could not read heights from raster #74
 ```
+
+See also https://github.com/geo-data/cesium-terrain-builder/issues/37
 
 Fix: Increase the -b option to a higher level
 
