@@ -221,10 +221,12 @@ End of processing
 In the tiling process, the following errors can occur:
 
 ```
-Processing tmp/M5_30GZ1_filled.TIF [1/1] : 0Using internal nodata values (e.g. 3.40282e+38) for image tmp/M5_30GZ1_filled.TIF.
-ERROR 1: Too many points (529 out of 529) failed to transform, unable to compute output bounds.
-Warning 1: Unable to compute source region for output window 0,0,1000,1250, skipping.
+ERROR 1: Integer overflow : nSrcXSize=97201, nSrcYSize=18001
+ERROR 1: IReadBlock failed at X offset 0, Y offset 0
+ERROR 1: GetBlockRef failed at X block offset 0, Y block offset 0 Error: Could not read heights from raster #74
 ```
+
+See also https://github.com/geo-data/cesium-terrain-builder/issues/37
 
 Fix: Increase the -b option to a higher level
 
