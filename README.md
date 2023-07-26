@@ -154,21 +154,34 @@ m fillnodata maxdistance (in pixels) - default 100
 h Print this help
 ```
 
+When option -c is not used, warp will check the EPSG code of the first GeoTIFF.
+
+- If no EPSG code is detected or the EPSG code is 28992: the default s_srs is used (EPSG:7415). 
+EPSG:7415 is a composite of EPSG:28992 (horizontal) and EPSG:5709 (vertical) used in the Netherlands. 
+A the vertical EPSG code is optional but needed to transform from geoid to ellipsoid.
+- In other cases: the detected EPSG code is used as s_srs
+
 Sample output:
 
 ```
-Terrain tiler 0.3 - Warp
-Start: Wed Jul 5 12:06:39 UTC 2023
+Terrain tiler 0.3.3 - Warp
+Start: Tue Jul 25 12:52:27 UTC 2023
 Temp directory: tmp
-Source SRS: EPSG:7415
+s_src input images:
 Fillnodata maxdistance: 100
+Delete tmp directory...
 tmp directory created.
-Start processing 256 GeoTIFFS...
-Processing DSM_1627_3855...
+s_srs not set, trying to detect it from first GeoTIFF
+EPSG of first tif: EPSG:28992
+make s_srs epsg:7415 in case of epsg:28992
+used s_srs: EPSG:7415
+Start processing 1 GeoTIFFS...
+100% 1:0=0s ./M5_32CN2.TIF
 Building virtual raster tmp/ahn.vrt...
+0...10...20...30...40...50...60...70...80...90...100 - done.
 VRT created: tmp/ahn.vrt
-End: Wed Jul 5 12:13:33 UTC 2023
-Elapsed time: 414 seconds.
+End: Tue Jul 25 12:52:28 UTC 2023
+Elapsed time: 1 seconds.
 End of processing
 ```
 
