@@ -104,14 +104,8 @@ end
 
 ## Reference Systems
 
-By default the composite Dutch reference system for the input GeoTIFFS is assumed (s_srs epsg: 7415). This can be changed with option -c in geodan/terrainwarp command.
+By default the reference system of the first input image used. If it's a Duch projection (epsg:28992) the vertical is also specified (using epsg: 7415 - composite of EPSG:28992 and EPSG:5709). The used epsg code can be overwritten with the -c in geodan/terrainwarp command.
 
-EPSG:7415 is a composite of:
-
-```
-Horizontal Reference System	EPSG:28992
-Vertical Reference System	EPSG:5709
-```
 In the process the images are warped using gdalwarp to EPSG:4326+4979 (-t_srs) to be used in Cesium using the WGS84 ellipsoid model.
 
 ## Docker
