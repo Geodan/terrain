@@ -56,7 +56,7 @@ echo Source SRS: $s_srs
 echo Fillnodata maxdistance: $md
 
 # Check if input directory has .tif files
-tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/nul | wc -l`
+tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/null | wc -l`
 
 if ! [ $((tiffs)) -gt 0 ]
 then
@@ -68,8 +68,8 @@ fi
 # Create tmp directory
 if [ -d "$tmp_dir" ];
 then
-    echo Delete tmp directory...
-    rm -r $tmp_dir 
+    echo A directory with the name ${tmp_dir} already exists. Please remove or rename it. Exiting...
+    exit
 fi
 
 mkdir -p "$tmp_dir"
