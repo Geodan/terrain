@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.3
+version=1.0
 tmp_dir=tmp
 s_srs=EPSG:7415
 md=100

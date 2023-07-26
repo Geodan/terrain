@@ -153,7 +153,7 @@ h Print this help
 Sample output:
 
 ```
-Terrain tiler 0.3 - Warp
+Terrain tiler 1.0 - Warp
 Start: Wed Jul 5 12:06:39 UTC 2023
 Temp directory: tmp
 Source SRS: EPSG:7415
@@ -195,7 +195,7 @@ $ docker run -v $(pwd):/data -it geodan/terraintiler -s 10
 Sample output:
 
 ```
-Terrain tiler 0.3
+Terrain tiler 1.0
 Start: Wed Jun 21 09:24:39 UTC 2023
 Output directory: tiles
 Tif extension: TIF
@@ -249,6 +249,16 @@ $ sh build_all.sh
 ```
 
 ## History
+
+2023-07-26: release 1.0: 
+
+- performance improvement by using parallel processes;
+
+- improved folder tmp handling;
+
+- improved different epsg codes;
+
+- improved error handling.
 
 2023-07-24: release 0.3.3: bug fix warp 
 
