@@ -8,13 +8,9 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ## Live Samples
 
-1] Heuvelrug - AHN3 https://geodan.github.io/terrain/samples/heuvelrug/
+1] Maastricht - AHN4 https://geodan.github.io/terrain/samples/maastricht/
 
-2] Maastricht - AHN4 https://geodan.github.io/terrain/samples/maastricht/
-
-![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
-
-3] Maastricht - AHN4 with contours https://geodan.github.io/terrain/samples/maastricht/index-elevation.html
+2] Maastricht - AHN4 with contours https://geodan.github.io/terrain/samples/maastricht/index-elevation.html
 
 ![image](https://github.com/Geodan/terrain/assets/538812/f3fcd771-29ce-4a66-b04f-22d87f09e9e4)
 
@@ -25,24 +21,22 @@ Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles.
 ![terraindemo](https://github.com/Geodan/terrain/assets/538812/6243c18a-4369-4118-866b-73b4b99ed6a4)
 
 ```
-$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M5_32CN2.zip
-$ unzip M5_32CN2.zip
+$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M_69AZ2.ZIP
+$ unzip M_69AZ2.ZIP
 ```
-
-![image](https://github.com/Geodan/terrain/assets/538812/44c606e5-5ba9-4864-b647-6011de630258)
 
 Tiling on Linux:
 
 ```
-$ docker run -v $(pwd):/data geodan/terrainwarp
+$ docker run -it -v $(pwd):/data geodan/terrainwarp
+```
+A subfolder 'tmp' will be created containing the processed GeoTIFF's
+
+```
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
-Remember for tiling on Windows fully specify the volume path.
-
 A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
-
-![image](https://github.com/Geodan/terrain/assets/538812/45a35e37-9e47-4693-9460-901667be3580)
 
 Terrain tiles can be used in CesiumJS as follows:
 
@@ -53,11 +47,10 @@ var terrainProvider = new Cesium.CesiumTerrainProvider({
 viewer.scene.terrainProvider = terrainProvider;
 viewer.scene.globe.depthTestAgainstTerrain=true;
 ```
-
 Download sample client and start webserver:
 
 ```
-$ wget https://raw.githubusercontent.com/Geodan/terrain/main/samples/heuvelrug/index.html
+$ wget https://raw.githubusercontent.com/Geodan/terrain/main/samples/maastricht/index.html
 $ python -m http.server
 ```
 
@@ -65,21 +58,9 @@ Open browser on port 8000.
 
 Result:
 
-![image](https://github.com/Geodan/terrain/assets/538812/cdd0f943-e534-4ff0-bc2f-7e0a79b4e59e)
+![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
 
-Live demo see https://geodan.github.io/terrain/samples/heuvelrug/
-
-Sample content of terrain tile at level 15:
-
-[samples/heuvelrug/heuvelrug_15_33730_25874.geojson](samples/heuvelrug/heuvelrug_15_33730_25874.geojson)
-
-![image](https://github.com/Geodan/terrain/assets/538812/d8f2a7b8-a5f6-4d02-8c0a-4a989e63ef70)
-
-## Input
-
-- 0.5m DTM's from https://service.pdok.nl/rws/ahn/atom/index.xml
-
-- 5M DTM's from [GeoJSON](https://services.arcgis.com/nSZVuSZjHpEZZbRo/arcgis/rest/services/Kaartbladen_AHN3/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=)
+Live demo see https://geodan.github.io/terrain/samples/maatricht/
 
 ## Process
 
