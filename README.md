@@ -60,7 +60,7 @@ Result:
 
 ![image](https://github.com/Geodan/terrain/assets/538812/5c7e345a-d2a8-4a21-828e-bf5f1fef6db6)
 
-Live demo see https://geodan.github.io/terrain/samples/maatricht/
+Live demo see https://geodan.github.io/terrain/samples/maastricht/
 
 ## Process
 
