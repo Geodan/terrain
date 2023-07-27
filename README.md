@@ -16,13 +16,10 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ## Getting started
 
-Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles. 
-
-![terraindemo](https://github.com/Geodan/terrain/assets/538812/6243c18a-4369-4118-866b-73b4b99ed6a4)
+Download AHN4 0.5m GeoTIFF of Maastricht and process to terrain tiles. 
 
 ```
-$ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M_69AZ2.ZIP
-$ unzip M_69AZ2.ZIP
+$ wget --no-check-certificate https://service.pdok.nl/rws/ahn/atom/downloads/dtm_05m/M_69AZ2.tif
 ```
 Start processing input GeoTIFF's
 
