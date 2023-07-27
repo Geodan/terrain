@@ -24,12 +24,12 @@ Download AHN3 5M GeoTIFF of Utrechtse Heuvelrug and process to terrain tiles.
 $ wget --no-check-certificate https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/DTM_5m/M_69AZ2.ZIP
 $ unzip M_69AZ2.ZIP
 ```
-
-Tiling on Linux:
+Start processing input GeoTIFF's
 
 ```
 $ docker run -it -v $(pwd):/data geodan/terrainwarp
 ```
+
 A subfolder 'tmp' will be created containing the processed GeoTIFF's
 
 ```
