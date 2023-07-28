@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.3.3
+version=1.0
 tmp_dir=tmp
 default_s_srs=EPSG:7415
 s_srs=""

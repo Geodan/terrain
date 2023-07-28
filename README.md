@@ -136,7 +136,7 @@ A the vertical EPSG code is optional but needed to transform from geoid to ellip
 Sample output:
 
 ```
-Terrain tiler 0.3.3 - Warp
+Terrain tiler 1.0 - Warp
 Start: Tue Jul 25 12:52:27 UTC 2023
 Temp directory: tmp
 s_src input images:
@@ -184,7 +184,7 @@ $ docker run -v $(pwd):/data -it geodan/terraintiler -s 10
 Sample output:
 
 ```
-Terrain tiler 0.3
+Terrain tiler 1.0
 Start: Wed Jun 21 09:24:39 UTC 2023
 Output directory: tiles
 Tif extension: TIF
@@ -240,6 +240,16 @@ $ sh build_all.sh
 ```
 
 ## History
+
+2023-07-26: release 1.0: 
+
+- performance improvement by using parallel processes;
+
+- improved folder tmp handling;
+
+- improved different epsg codes;
+
+- improved error handling.
 
 2023-07-24: release 0.3.3: bug fix warp 
 
