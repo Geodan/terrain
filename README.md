@@ -14,6 +14,12 @@ Quantized mesh specs: https://github.com/CesiumGS/quantized-mesh
 
 ![image](https://github.com/Geodan/terrain/assets/538812/f3fcd771-29ce-4a66-b04f-22d87f09e9e4)
 
+3] Corsica - DTM's from https://geoservices.ign.fr/rgealti
+
+https://geodan.github.io/terrain/samples/corsica/
+
+![image](https://github.com/Geodan/terrain/assets/538812/1abb76f4-6d23-4ea4-ae65-49cd2719385e)
+
 ## Getting started
 
 Download AHN4 0.5m GeoTIFF of Maastricht and process to terrain tiles. 
