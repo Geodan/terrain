@@ -125,10 +125,11 @@ $ docker run -v $(pwd):/data -it geodan/terrainwarp
 The script takes as input parameters:
 
 ```
-Syntax: [-c|m|h]
+Syntax: [-c|m|j|h]
 options:
 c Source s_srs - default EPSG:7415
 m fillnodata maxdistance (in pixels) - default 100
+j number of parallel jobs - default 5
 h Print this help
 ```
 
@@ -142,11 +143,12 @@ A the vertical EPSG code is optional but needed to transform from geoid to ellip
 Sample output:
 
 ```
-Terrain tiler 1.0 - Warp
+Terrain tiler 1.1 - Warp
 Start: Tue Jul 25 12:52:27 UTC 2023
 Temp directory: tmp
 s_src input images:
 Fillnodata maxdistance: 100
+Jobs: 6
 Delete tmp directory...
 tmp directory created.
 s_srs not set, trying to detect it from first GeoTIFF
@@ -178,6 +180,7 @@ o Output directory - default tiles
 b Break zoomlevel - default 9
 s Start zoomlevel - default 15
 e End zoomlevel - default 0
+j number of parallel jobs - default 5
 h Print this help
 ```
 
@@ -190,13 +193,14 @@ $ docker run -v $(pwd):/data -it geodan/terraintiler -s 10
 Sample output:
 
 ```
-Terrain tiler 1.0
+Terrain tiler 1.1
 Start: Wed Jun 21 09:24:39 UTC 2023
 Output directory: tiles
 Tif extension: TIF
 Start zoomlevel: 15
 Break zoomlevel: 9
 End zoomlevel: 0
+Jobs: 6
 Delete output directory...
 Directory created: tiles
 Running ctb-tile from 15 to level 9...
@@ -246,6 +250,12 @@ $ sh build_all.sh
 ```
 
 ## History
+
+2023-08-08: release 1.1:
+
+- add -j option for number of parallel jobs
+
+- removed parallel progress bar in tiler
 
 2023-07-26: release 1.0: 
 

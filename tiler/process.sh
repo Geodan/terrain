@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=1.0
+version=1.1
 
 # Set default values 
 output_dir=tiles
@@ -8,6 +8,7 @@ tmp_dir=tmp
 start_zoom=15
 break_zoom=9
 end_zoom=0
+jobs=5
 # Sample reading parameter
 echo Terrain tiler $version - Step 2/2 Tiling
 start_time=$(date +%s)
@@ -16,24 +17,26 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[b|s|e|o|h]'
+   echo Syntax: '[b|s|e|o|j|h]'
    echo options:
    echo o     Output directory - default $output_dir
    echo s     Start zoomlevel - default $start_zoom   
    echo b     Break zoomlevel - default $break_zoom
    echo e     End zoomlevel - default $end_zoom
+   echo j     Number of jobs - default $jobs
    echo h     Print this help
    echo
 }
 
 # Parse input arguments (flags)
-while getopts s:e:b:o:h flag
+while getopts s:e:b:o:j:h flag
 do
     case $flag in
         o) output_dir=$OPTARG;;
         s) start_zoom=$OPTARG;;
         b) break_zoom=$OPTARG;;
         e) end_zoom=$OPTARG;;
+        j) jobs=$OPTARG;;
         h) print_usage; exit 0;;
     esac
 done
@@ -42,6 +45,7 @@ echo Output directory: $output_dir
 echo Start zoomlevel: $start_zoom
 echo Break zoomlevel: $break_zoom
 echo End zoomlevel: $end_zoom
+echo Jobs: $jobs
 
 # Check on tmp dir
 if [ ! -d "$tmp_dir" ];
@@ -107,8 +111,11 @@ ctb-tile -v -f Mesh -C -N -e ${end_zoom} -s $((break_zoom-1)) -o ${output_dir} $
 
 # end workaround for level break_zoom - 0
 
+echo
 echo Unzip terrain files...
-find ${output_dir} -name '*.terrain' | parallel --bar 'mv {} {}.gz && gunzip -f -S terrain {}.gz'
+echo Warning: this may take a while...
+echo No progressbar is shown because performance.
+find ${output_dir} -name '*.terrain' | parallel -j ${jobs} 'mv {} {}.gz && gunzip -f -S terrain {}.gz'
 
 end_time=$(date +%s)
 echo End: $(date)
