@@ -1,10 +1,11 @@
 #!/bin/bash
 
-version=1.0
+version=1.1
 tmp_dir=tmp
 default_s_srs=EPSG:7415
 s_srs=""
 md=100
+jobs=5
 
 echo Terrain tiler $version - Warp
 start_time=$(date +%s)
@@ -13,10 +14,11 @@ echo Start: $(date)
 print_usage()
 {
    # Display Help
-   echo Syntax: '[-c|m|h]'
+   echo Syntax: '[-c|m|j|h]'
    echo options:
    echo c     Source s_srs - default $s_srs
    echo m     fillnodata maxdistance in pixels - default $md
+   echo j     Number of jobs - default $jobs
    echo h     Print this help
    echo
 }
@@ -38,22 +40,24 @@ warp_tiff()
 warp_tiffs()
 {
     echo Start processing ${tiffs} GeoTIFFS...
-    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar warp_tiff ${tmp_dir} ${md} ${s_srs}
+    find ./ -maxdepth 1 -type f -iname '*.tif' | parallel --bar -j ${jobs} warp_tiff ${tmp_dir} ${md} ${s_srs}
 }
 export -f warp_tiff
 
 # Parse input arguments (flags)
-while getopts c:m:h flag
+while getopts c:m:j:h flag
 do
     case $flag in
         c) s_srs=$OPTARG;;
         m) md=$OPTARG;;
+        j) jobs=$OPTARG;;
         h) print_usage; exit 0;;
     esac
 done
 
 echo Temp directory: $tmp_dir
 echo Fillnodata maxdistance: $md
+echo Jobs: $jobs
 
 # Check if input directory has .tif files
 tiffs=`find ./ -maxdepth 1 -type f -iname '*.tif' 2> /dev/null | wc -l`
