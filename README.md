@@ -30,7 +30,7 @@ $ wget --no-check-certificate https://service.pdok.nl/rws/ahn/atom/downloads/dtm
 Start processing input GeoTIFF's
 
 ```
-$ docker run -it -v $(pwd):/data geodan/terrainwarp
+$ docker run -it -v $(pwd):/data geodan/terrainwarp -m 1000
 ```
 
 A subfolder 'tmp' will be created containing the processed GeoTIFF's
@@ -39,7 +39,7 @@ A subfolder 'tmp' will be created containing the processed GeoTIFF's
 $ docker run -v $(pwd):/data geodan/terraintiler
 ```
 
-A subfolder 'tiles' will be created containing  file layer json and a set of .terrain tiles in a directory per level (0-15).
+A subfolder 'tiles' will be created containing  file 'layer.json' and a set of .terrain tiles in a directory per level (0-15).
 
 Terrain tiles can be used in CesiumJS as follows:
 
@@ -148,7 +148,7 @@ Start: Tue Jul 25 12:52:27 UTC 2023
 Temp directory: tmp
 s_src input images:
 Fillnodata maxdistance: 100
-Jobs: 6
+Jobs: 5
 Delete tmp directory...
 tmp directory created.
 s_srs not set, trying to detect it from first GeoTIFF
@@ -200,7 +200,7 @@ Tif extension: TIF
 Start zoomlevel: 15
 Break zoomlevel: 9
 End zoomlevel: 0
-Jobs: 6
+Jobs: 5
 Delete output directory...
 Directory created: tiles
 Running ctb-tile from 15 to level 9...
