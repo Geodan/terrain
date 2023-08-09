@@ -106,10 +106,6 @@ echo Creating GTiff tiles for level ${break_zoom}...
 ctb-tile -v --output-format GTiff --profile ${profile} --output-dir ${tmp_dir} -s ${break_zoom} -e ${break_zoom} ${tmp_dir}/ahn.vrt
 echo 
 
-# set the projections the same for all GeoTIFF tiles on level break_zoom (workaround)
-echo Set projection for GTiff tiles on level ${break_zoom}...
-find ${tmp_dir}/${break_zoom} -name '*.tif' | parallel --bar 'gdalwarp -t_srs EPSG:4326 {} {}.tif && rm {}' 
-
 # create VRT for GeoTIFF tiles on level break_zoom
 echo Create vrt for GTiff tiles on level ${break_zoom}...
 gdalbuildvrt ${tmp_dir}/level${break_zoom}.vrt ./${tmp_dir}/${break_zoom}/*/*.tif
