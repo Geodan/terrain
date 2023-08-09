@@ -1,5 +1,5 @@
-FROM tumgis/ctb-quantized-mesh
-RUN apt-get update && apt-get install -y parallel
+FROM tumgis/ctb-quantized-mesh:alpine
+RUN apk update && apk add parallel && apk add findutils && apk add gzip
 
 COPY process.sh /
 RUN chmod +x /process.sh
