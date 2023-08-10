@@ -111,8 +111,14 @@ echo Create vrt for GTiff tiles on level ${break_zoom}...
 gdalbuildvrt ${tmp_dir}/level${break_zoom}.vrt ./${tmp_dir}/${break_zoom}/*/*.tif
 
 # Make terrain tiles for level ${break_zoom}-1 to 0 
+echo
 echo Run ctb tile on level $((break_zoom-1)) to 0
 ctb-tile -v -f Mesh --profile ${profile} -C -N -e ${end_zoom} -s $((break_zoom-1)) -o ${output_dir} ${tmp_dir}/level${break_zoom}.vrt
+
+# clean up the temporary files
+echo Clean up temporary files...
+rm -rf ${tmp_dir}/level${break_zoom}.vrt
+rm -rf ./${tmp_dir}/${break_zoom}
 
 # end workaround for level break_zoom - 0
 
