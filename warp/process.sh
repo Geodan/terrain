@@ -120,8 +120,13 @@ echo used s_srs: $s_srs
 
 warp_tiffs
 
+# Generating the list of TIF files
+find ${tmp_dir} -name '*.tif' > tif_4_vrt.txt
+echo TIF file list generated: tif_4_vrt.txt
+
+# Build VRT from index file
 echo Building virtual raster ${tmp_dir}/ahn.vrt...
-gdalbuildvrt -a_srs EPSG:4326 ${tmp_dir}/ahn.vrt ${tmp_dir}/*.tif
+gdalbuildvrt -input_file_list tif_4_vrt.txt ${tmp_dir}/ahn.vrt -a_srs EPSG:4326
 echo VRT created: ${tmp_dir}/ahn.vrt
 
 end_time=$(date +%s)
